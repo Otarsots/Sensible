@@ -1,5 +1,6 @@
 package com.example.sensible
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,16 +11,22 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.Scaffold
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.sensible.ui.components.BarcodeScreen
+import com.example.sensible.ui.components.CameraPreview
 import com.example.sensible.ui.theme.SensibleTheme
 import com.example.sensible.ui.components.SensibleBottomBar
 import com.example.sensible.ui.diary.DiaryScreen
 import com.example.sensible.ui.home.HomeScreen
 import com.example.sensible.ui.recipe.RecipeScreen
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 class MainActivity : ComponentActivity() {
@@ -31,6 +38,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SensibleApp(){
     SensibleTheme {
@@ -38,10 +46,16 @@ fun SensibleApp(){
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
+            //Navigation
             val allScreens = SensibleScreen.values().toList()
             val navController = rememberNavController()
             val backstackEntry = navController.currentBackStackEntryAsState()
             val currentScreen = SensibleScreen.fromRoute(backstackEntry.value?.destination?.route)
+
+            //Barcode Scanning
+            val showDialog = mutableStateOf(false)
+            val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+
             Scaffold(
                 bottomBar = {
                     SensibleBottomBar(
@@ -54,7 +68,9 @@ fun SensibleApp(){
                 floatingActionButtonPosition = FabPosition.End,
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { /* fab click handler */ },
+                        onClick = {
+                            cameraPermissionState.launchPermissionRequest()
+                            showDialog.value = true },
                         content = {
                             Icon(
                                 Icons.Filled.Favorite,
@@ -67,6 +83,9 @@ fun SensibleApp(){
                 },
             ) {
                 RallyNavHost(navController)
+                if(showDialog.value) {
+                    BarcodeScreen()
+                }
             }
         }
     }
