@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sensible.models.Product
 import com.example.sensible.models.ProductResult
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Response
-import retrofit2.http.GET
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 import retrofit2.http.Path
+
 
 interface OpenFoodFactsApi {
     @GET("/api/v0/product/{code}")
@@ -29,10 +32,15 @@ interface OpenFoodFactsApi {
 object RetrofitHelper {
 
     private const val baseUrl = "https://world.openfoodfacts.org/"
+    val contentType = "application/json".toMediaType()
+
+    var gson = GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation()
+        .create()
 
     fun getInstance(): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             // we need to add converter factory to
             // convert JSON object to Java object
             .build()
@@ -52,7 +60,8 @@ fun PreviewFood(){
     val text = remember{mutableStateOf("")}
     val getProductOnClick: () -> Unit = {
         coroutineScope.launch {
-            text.value = getProductData(737628064502)?.genericName.toString()
+            text.value =
+                getProductData(737628064502)?.productName.toString()
         }
     }
 
