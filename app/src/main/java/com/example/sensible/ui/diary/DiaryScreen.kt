@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sensible.data.MainViewModel
+import com.example.sensible.models.DiaryEntry
 import com.example.sensible.models.Product
 import kotlinx.coroutines.launch
 
@@ -32,11 +32,9 @@ fun DiaryBody(
     entries: List<DiaryEntry>,
     onEntryClick: (String) -> Unit = {},
 ){
-    StatementBody(
-        modi
-    )
-}
 
+}
+/*
 @Composable
 fun DiaryScreen() {
     ScreenSetup()
@@ -151,4 +149,4 @@ fun MainScreen(
         }
     }
 
-}
+}*/

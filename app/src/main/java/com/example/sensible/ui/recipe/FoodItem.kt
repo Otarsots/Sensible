@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.sensible.ui.components.AnimatedCircle
-import com.example.sensible.ui.components.scanning
 import com.example.sensible.ui.theme.SensibleTheme
 import com.example.sensible.util.getProductData
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -62,8 +61,7 @@ fun FoodItem(){
                     style = MaterialTheme.typography.h6,
                 )
                 Button(onClick =
-                {cameraPermissionState.launchPermissionRequest()
-                        scanning = true}, shape = CircleShape) {
+                {cameraPermissionState.launchPermissionRequest()}, shape = CircleShape) {
 
                 }
             }

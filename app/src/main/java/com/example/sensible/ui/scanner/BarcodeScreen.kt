@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.sensible.data.MainViewModel
+import com.example.sensible.data.ProductViewModel
 import com.example.sensible.util.BarCodeAnalyser
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
@@ -48,8 +48,8 @@ fun CameraPreview() {
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
     val barCodeVal = remember { mutableStateOf("") }
-    val viewModel: MainViewModel =
-    MainViewModel(LocalContext.current.applicationContext as Application)
+    val viewModel: ProductViewModel =
+    ProductViewModel(LocalContext.current.applicationContext as Application)
         AndroidView(
             factory = { AndroidViewContext ->
                 PreviewView(AndroidViewContext).apply {
@@ -110,7 +110,6 @@ fun CameraPreview() {
             }
         )
     }
-}
 
 
 
