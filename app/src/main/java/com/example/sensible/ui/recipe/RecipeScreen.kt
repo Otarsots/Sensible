@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.sensible.ui.components.AnimatedCircle
 
+@Composable
+fun RecipeBody(){}
 
 @Composable
 fun RecipeScreen() {

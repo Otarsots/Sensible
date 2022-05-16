@@ -1,7 +1,7 @@
 package com.example.sensible.models
 
 
-class Recipe(private val ingredients: List<Food>, override val amount: Long): FoodInterface {
+class Recipe(private val ingredients: List<Food>, override val amount: Long, val Portions: Long): FoodInterface {
 
 
     override val protein: Double
@@ -10,7 +10,7 @@ class Recipe(private val ingredients: List<Food>, override val amount: Long): Fo
              for(ingredient:Food in this.ingredients){
                 count += ingredient.protein
             }
-            return count*amount/100
+            return count*amount/(100*Portions)
         }
 
     override val carbs: Double
@@ -19,7 +19,7 @@ class Recipe(private val ingredients: List<Food>, override val amount: Long): Fo
             for(ingredient:Food in this.ingredients){
                 count += ingredient.carbs
             }
-            return count*amount/100
+            return count*amount/(100*Portions)
         }
 
     override val fat: Double
@@ -28,7 +28,7 @@ class Recipe(private val ingredients: List<Food>, override val amount: Long): Fo
             for(ingredient:Food in this.ingredients){
                 count += ingredient.fat
             }
-            return count*amount/100
+            return count*amount/(100*Portions)
         }
 
     override val calories: Double
@@ -37,6 +37,6 @@ class Recipe(private val ingredients: List<Food>, override val amount: Long): Fo
             for(ingredient:Food in this.ingredients){
                 count += ingredient.calories
             }
-            return count*amount/100
+            return count*amount/(100*Portions)
         }
 }

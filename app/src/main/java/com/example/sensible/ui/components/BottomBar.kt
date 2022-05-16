@@ -18,8 +18,8 @@ fun SensibleBottomBar(
     ) {
         allScreens.forEach {screen ->
             BottomNavigationItem(
-                icon = {Icon(screen.icon, contentDescription = null)},
-                label = {Text(screen.name)},
+                icon = {screen.icon},
+                label = {screen.name},
                 selected = currentScreen == screen,
                 onClick = {onTabSelected(screen)}
             )

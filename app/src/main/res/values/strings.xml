@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Sensible</string>
+    <string name="home_name">Home</string>
+    <string name="diary_name">Diary</string>
+    <string name="recipes_name">Recipes</string>
 </resources>

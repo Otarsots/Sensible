@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.Scaffold
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.sensible.data.ProductRoomDatabase
 import com.example.sensible.ui.theme.SensibleTheme
 import com.example.sensible.ui.components.SensibleBottomBar
+import com.example.sensible.ui.diary.DiaryBody
+import com.example.sensible.ui.home.HomeBody
+import com.example.sensible.ui.recipe.RecipeBody
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
@@ -42,7 +46,7 @@ fun SensibleApp(){
             val database = ProductRoomDatabase
 
             //Navigation
-            val allScreens = SensibleScreen.values().toList()
+            val allScreens = listOf(SensibleScreen.Home, SensibleScreen.Diary, SensibleScreen.Recipes)
             val navController = rememberNavController()
             val backstackEntry = navController.currentBackStackEntryAsState()
             val currentScreen = SensibleScreen.fromRoute(backstackEntry.value?.destination?.route)
@@ -75,7 +79,7 @@ fun SensibleApp(){
                     )
                 },
             ) {
-                RallyNavHost(navController)
+                SensibleNavHost(navController)
 
             }
         }
@@ -83,26 +87,32 @@ fun SensibleApp(){
 }
 
 @Composable
-fun RallyNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
-        startDestination = SensibleScreen.Home.name,
+        startDestination = SensibleScreen.Home.route,
         modifier = modifier
     ) {
-        composable(SensibleScreen.Home.name) {
+        composable(SensibleScreen.Home.route) {
             HomeBody(
 
             )
         }
-        composable(SensibleScreen.Diary.name) {
+        composable(SensibleScreen.Diary.route) {
             DiaryBody(
 
             )
         }
-        composable(SensibleScreen.Recipes.name) {
+        composable(SensibleScreen.Recipes.route) {
             RecipeBody(
 
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun BottomBarPreview(){
+    SensibleApp()
 }

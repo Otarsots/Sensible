@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -29,8 +28,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DiaryBody(
-    entries: List<DiaryEntry>,
-    onEntryClick: (String) -> Unit = {},
+    //entries: List<DiaryEntry>,
+    //onEntryClick: (String) -> Unit = {},
 ){
 
 }
