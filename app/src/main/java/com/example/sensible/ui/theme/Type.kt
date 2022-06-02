@@ -12,7 +12,7 @@ val Typography = Typography(
     h6 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 24.sp
+        fontSize = 18.sp
     ),
     body1 = TextStyle(
         fontFamily = FontFamily.Default,

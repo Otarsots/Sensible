@@ -15,15 +15,16 @@ private val DarkColorPalette = darkColors(
     secondaryVariant = LightOrangeVariant,
     onPrimary = Color.White,
     onSecondary = Color.White,
+    surface = DarkSurface
 )
 
 private val LightColorPalette = lightColors(
-    primary = LightOrange,
-    primaryVariant = LightOrangeVariant,
-    secondary = DarkOrange,
-    secondaryVariant = DarkOrangeVariant,
+    primary = DarkOrange,
+    primaryVariant = DarkOrangeVariant,
+    secondary = LightOrange,
+    secondaryVariant = LightOrangeVariant,
     background = Color.White,
-    surface = Color.White,
+    surface = LightSurface,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.Black,
@@ -42,11 +43,13 @@ fun SensibleTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
             color = Color.White
         )
     }
+
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
+
 
     MaterialTheme(
         colors = colors,

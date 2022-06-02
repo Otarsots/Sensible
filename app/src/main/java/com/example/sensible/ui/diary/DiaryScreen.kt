@@ -1,37 +1,52 @@
 package com.example.sensible.ui.diary
 
-import android.app.Application
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.sensible.models.DiaryEntry
-import com.example.sensible.models.Product
-import kotlinx.coroutines.launch
+import com.example.sensible.models.Recipe
+import com.example.sensible.ui.components.FoodListItem
+import com.example.sensible.ui.theme.SensibleTheme
 
 
 @Composable
 fun DiaryBody(
-    //entries: List<DiaryEntry>,
+    entries: List<DiaryEntry>,
     //onEntryClick: (String) -> Unit = {},
+    //onAddClick: (String) -> Unit = {}
 ){
+}
 
+
+@Composable
+fun EntryList(
+    entry: DiaryEntry
+) {
+    Surface (
+        elevation = 2.dp,
+        color = MaterialTheme.colors.surface,
+        shape = RoundedCornerShape(8.dp)){
+        LazyColumn(contentPadding = PaddingValues(8.dp)) {
+            items(entry.foods) { food ->
+                Box(Modifier.padding(2.dp)) {
+                    FoodListItem(
+                        title = food.name,
+                        image = rememberAsyncImagePainter(food.imageURL),
+                        calories = food.calories,
+                        amount = food.amount,
+                    )
+                }
+            }
+        }
+    }
 }
 /*
 @Composable
@@ -63,7 +78,7 @@ fun ProductRow(id: Int, name: String, quantity: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(5.dp)F
     ) {
         Text(id.toString(), modifier = Modifier
             .weight(0.1f))
@@ -149,3 +164,25 @@ fun MainScreen(
     }
 
 }*/
+
+@Preview
+@Composable
+fun FoodListPreview(){
+    SensibleTheme(darkTheme = true){
+        val entry = remember{DiaryEntry(1, mutableListOf())}
+        entry.foods.add(Recipe(emptyList(),100,1.0,"Griechische Reispfanne mit Spargel und ganz viel anderem Zeug"))
+        entry.foods.add(Recipe(emptyList(),100,0.5,"Spargel"))
+        EntryList(entry = entry)
+    }
+}
+
+@Preview
+@Composable
+fun LightFoodListPreview(){
+    SensibleTheme(darkTheme = false){
+        val entry = remember{DiaryEntry(1, mutableListOf())}
+        entry.foods.add(Recipe(emptyList(),100,1.0,"Griechische Reispfanne mit Spargel und ganz viel anderem Zeug"))
+        entry.foods.add(Recipe(emptyList(),100,0.5,"Spargel"))
+        EntryList(entry = entry)
+    }
+}

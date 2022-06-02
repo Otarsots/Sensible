@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material.Scaffold
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavHostController
@@ -60,7 +61,7 @@ fun SensibleApp(){
                     SensibleBottomBar(
                         allScreens = allScreens,
                         onTabSelected = {screen ->
-                            navController.navigate(screen.name)
+                            navController.navigate(screen.route)
                         },
                         currentScreen = currentScreen)
                 },
@@ -70,7 +71,7 @@ fun SensibleApp(){
                         onClick = {navController.navigate("scanner")},
                         content = {
                             Icon(
-                                Icons.Filled.Favorite,
+                                painterResource(R.drawable.ic_launcher_add),
                                 contentDescription = null,
                             )
                         },
@@ -100,7 +101,7 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
         }
         composable(SensibleScreen.Diary.route) {
             DiaryBody(
-
+                emptyList()
             )
         }
         composable(SensibleScreen.Recipes.route) {

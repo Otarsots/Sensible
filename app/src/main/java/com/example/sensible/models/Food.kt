@@ -1,8 +1,15 @@
 package com.example.sensible.models
 
+import androidx.compose.ui.graphics.painter.Painter
+import coil.compose.rememberAsyncImagePainter
 
 
 class Food(val product: Product, override val amount: Long): FoodInterface {
+    override val name: String
+        get() = product.productName
+
+    override val imageURL: String
+        get() = product.imageUrl.orEmpty()
 
     override val protein: Double
         get() {

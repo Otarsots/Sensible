@@ -11,9 +11,9 @@ sealed class SensibleScreen(
     @StringRes val name: Int,
     @DrawableRes val icon: Int
 ) {
-    object Home: SensibleScreen("home", R.string.home_name, R.drawable.ic_launcher_foreground)
-    object Diary: SensibleScreen("diary", R.string.diary_name, R.drawable.ic_launcher_foreground)
-    object Recipes: SensibleScreen("recipes", R.string.recipes_name, R.drawable.ic_launcher_foreground)
+    object Home: SensibleScreen("home", R.string.home_name, R.drawable.ic_launcher_home)
+    object Diary: SensibleScreen("diary", R.string.diary_name, R.drawable.ic_launcher_diary)
+    object Recipes: SensibleScreen("recipes", R.string.recipes_name, R.drawable.ic_launcher_recipes)
 
     companion object {
         fun fromRoute(route: String?): SensibleScreen =

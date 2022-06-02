@@ -1,7 +1,11 @@
 package com.example.sensible.models
 
 
-class Recipe(private val ingredients: List<Food>, override val amount: Long, val Portions: Long): FoodInterface {
+class Recipe(private val ingredients: List<Food>, override val amount: Long, val Portions: Double,
+             override val name: String
+): FoodInterface {
+    override val imageURL: String
+        get() = ""
 
 
     override val protein: Double

@@ -43,7 +43,9 @@ import java.util.concurrent.Executors
 
 
 @Composable
-fun CameraPreview() {
+fun CameraPreview(
+    onCodeScanned: (String) -> Unit = {}
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -83,8 +85,7 @@ fun CameraPreview() {
                         barcodes.forEach { barcode ->
                             barcode.rawValue?.let { barcodeValue ->
                                 barCodeVal.value = barcodeValue
-                                Toast.makeText(context, barcodeValue, Toast.LENGTH_SHORT).show()
-                                viewModel.insertProduct(barcodeValue.toLong())
+                                onCodeScanned
                             }
                         }
                     }

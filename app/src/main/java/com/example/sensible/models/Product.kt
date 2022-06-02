@@ -98,6 +98,7 @@ data class Product(
     var imageSmallUrl: String?,
     @SerializedName("image_thumb_url")
     var imageThumbUrl: String?,
+    @Expose
     @SerializedName("image_url")
     var imageUrl: String?,
     @SerializedName("images")

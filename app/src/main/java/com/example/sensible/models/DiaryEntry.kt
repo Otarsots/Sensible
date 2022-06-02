@@ -1,3 +1,8 @@
 package com.example.sensible.models
 
-class DiaryEntry(){}
+class DiaryEntry(
+    val date: Long,
+    val foods: MutableList<FoodInterface>,
+){
+
+}
