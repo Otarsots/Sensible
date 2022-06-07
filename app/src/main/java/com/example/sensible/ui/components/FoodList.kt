@@ -30,12 +30,6 @@ fun FoodList(
 
     foods: List<FoodInterface>
 ) {
-    Surface(
-        elevation = 2.dp,
-        color = MaterialTheme.colors.surface,
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
         var filteredFoods: List<FoodInterface>
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
@@ -70,22 +64,30 @@ fun FoodList(
                 }
             }
         }
-    }
 }
 
 @Composable
-fun searchableFoodList(
+fun SearchableFoodList(
     onItemClick: (String) -> Unit,
     foods: List<FoodInterface>
 ){
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    Column {
-        SearchBar(textState) {}
-        FoodList(
-            onItemClick = {},
-            state = textState,
-            foods = foods
-        )
+    Surface(
+        elevation = 2.dp,
+        color = MaterialTheme.colors.surface,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column {
+            SearchBar(
+                textState, color = MaterialTheme.colors.surface,
+                modifier = Modifier.padding(8.dp)
+            ) {}
+            FoodList(
+                onItemClick = {},
+                state = textState,
+                foods = foods
+            )
+        }
     }
 }
 
@@ -105,7 +107,8 @@ fun searchableFoodListPreview(){
         foods.add(Recipe(emptyList(),100,0.5,"Spargel"))
         foods.add(Recipe(emptyList(),100,0.5,"Spargel"))
         foods.add(Recipe(emptyList(),100,0.5,"irgendwas mit Ei"))
-        searchableFoodList(onItemClick = {},
-            foods = foods)
+        SearchableFoodList(
+            onItemClick = {},
+            foods = foods,)
     }
 }

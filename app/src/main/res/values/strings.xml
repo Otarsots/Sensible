@@ -2,5 +2,9 @@
     <string name="app_name">Sensible</string>
     <string name="home_name">Home</string>
     <string name="diary_name">Diary</string>
+    <string name="diary_editor_name">Edit entry</string>
+    <string name="diary_search_name">Search food</string>
     <string name="recipes_name">Recipes</string>
+    <string name="recipes_editor_name">Edit recipe</string>
+    <string name="recipes_search_name">Search product</string>
 </resources>

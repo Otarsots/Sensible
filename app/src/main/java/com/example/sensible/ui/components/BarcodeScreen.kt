@@ -43,8 +43,8 @@ import java.util.concurrent.Executors
 
 
 @Composable
-fun CameraPreview(
-    onCodeScanned: (String) -> Unit = {}
+fun BarcodeScreen(
+    onCodeScanned: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -85,7 +85,6 @@ fun CameraPreview(
                         barcodes.forEach { barcode ->
                             barcode.rawValue?.let { barcodeValue ->
                                 barCodeVal.value = barcodeValue
-                                onCodeScanned
                             }
                         }
                     }

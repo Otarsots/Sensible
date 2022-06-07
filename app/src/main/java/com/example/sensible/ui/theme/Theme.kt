@@ -9,22 +9,20 @@ import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = DarkOrange,
-    primaryVariant = DarkOrangeVariant,
-    secondary = LightOrange,
-    secondaryVariant = LightOrangeVariant,
+    primary = Brown200,
+    primaryVariant = Brown50,
+    secondary = Orange200,
     onPrimary = Color.White,
     onSecondary = Color.White,
     surface = DarkSurface
 )
 
 private val LightColorPalette = lightColors(
-    primary = DarkOrange,
-    primaryVariant = DarkOrangeVariant,
-    secondary = LightOrange,
-    secondaryVariant = LightOrangeVariant,
+    primary = Brown500,
+    primaryVariant = Brown700,
+    secondary = Orange200,
     background = Color.White,
-    surface = LightSurface,
+    surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = Color.Black,

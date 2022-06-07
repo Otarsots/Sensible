@@ -1,6 +1,5 @@
 package com.example.sensible.ui.components
 
-import android.graphics.Color
 import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -26,8 +26,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -38,6 +37,23 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import com.example.sensible.R
 import com.example.sensible.ui.theme.SensibleTheme
+@Composable
+fun SensibleActionButton(
+    onClick: () -> Unit
+){
+    FloatingActionButton(
+        onClick = onClick,
+        content = {
+            Icon(
+                painterResource(R.drawable.ic_launcher_add),
+                contentDescription = null,
+            )
+        },
+        backgroundColor = MaterialTheme.colors.secondary,
+        contentColor = MaterialTheme.colors.onSecondary,
+    )
+}
+
 
 @Composable
 fun FoodListItem(
@@ -67,9 +83,9 @@ fun FoodListItem(
                             .size(56.dp)
                             // Clip image to be shaped as a circle
                             .clip(CircleShape)
-                            .border(1.5.dp, MaterialTheme.colors.secondaryVariant, CircleShape)
-                            .background(MaterialTheme.colors.secondary),
-                        contentScale = ContentScale.Inside
+                            .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+                            .background(MaterialTheme.colors.surface),
+                        contentScale = ContentScale.Crop
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -107,13 +123,15 @@ fun FoodListItem(
 @Composable
 fun SearchBar(
     state: MutableState<TextFieldValue>,
+    color: Color = MaterialTheme.colors.surface,
+    modifier: Modifier = Modifier,
     onScanClick: () -> Unit ) {
     OutlinedTextField(
         value = state.value,
         onValueChange = { value ->
             state.value = value
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         textStyle = MaterialTheme.typography.body1,
         leadingIcon = {
@@ -121,7 +139,7 @@ fun SearchBar(
                 Icons.Default.Search,
                 contentDescription = "",
                 modifier = Modifier
-                    .padding(15.dp)
+                    .padding(16.dp)
                     .size(24.dp)
             )
         },
@@ -137,7 +155,7 @@ fun SearchBar(
                         Icons.Default.Close,
                         contentDescription = "",
                         modifier = Modifier
-                            .padding(15.dp)
+                            .padding(16.dp)
                             .size(24.dp)
                     )
                 }
@@ -150,23 +168,26 @@ fun SearchBar(
                         painterResource(R.drawable.ic_launcher_barcode),
                         contentDescription = "",
                         modifier = Modifier
-                            .padding(15.dp)
+                            .padding(16.dp)
                             .size(24.dp)
                     )
                 }
             }
         },
         singleLine = true,
-        shape = RoundedCornerShape(8.dp), // The TextFiled has rounded corners top left and right by default
+        shape = RoundedCornerShape(32.dp), // The TextFiled has rounded corners top left and right by default
         colors = TextFieldDefaults.textFieldColors(
+            /*
             textColor = MaterialTheme.colors.onPrimary,
             cursorColor = MaterialTheme.colors.onPrimary,
             leadingIconColor = MaterialTheme.colors.onPrimary,
             trailingIconColor = MaterialTheme.colors.onPrimary,
-            backgroundColor = MaterialTheme.colors.primary,
+
             focusedIndicatorColor = MaterialTheme.colors.onPrimary.copy(0.75F),
             unfocusedIndicatorColor = MaterialTheme.colors.onPrimary.copy(0.5F),
-            disabledIndicatorColor = Transparent
+             */
+            disabledIndicatorColor = Transparent,
+            backgroundColor = color,
         )
     )
 }
@@ -176,14 +197,14 @@ fun SearchBar(
 fun SearchViewPreview() {
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     SensibleTheme {
-        SearchBar(textState) {}
+        SearchBar(textState, color = MaterialTheme.colors.primary) {}
     }
 }
 
 @Preview
 @Composable
 fun FoodRowPreview(){
-    SensibleTheme(darkTheme = true){
+    SensibleTheme(darkTheme = false){
         FoodListItem(title = "peanuts", image = painterResource(R.drawable.cola), calories = 100.0, amount = 1)
     }
 }
