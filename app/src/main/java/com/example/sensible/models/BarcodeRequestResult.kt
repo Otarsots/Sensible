@@ -1,17 +1,15 @@
 package com.example.sensible.models
 
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ProductResult(
+data class BarcodeRequestResult(
     @SerializedName("code")
-    val code: String?,
-    @Expose
+    val code: String,
     @SerializedName("product")
-    val product: Product?,
+    val product: Product,
     @SerializedName("status")
-    val status: Int?,
+    val status: Int,
     @SerializedName("status_verbose")
-    val statusVerbose: String?
+    val statusVerbose: String
 )

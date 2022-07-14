@@ -15,13 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import com.example.sensible.R
 import com.example.sensible.ui.components.SearchBar
-import com.example.sensible.ui.components.SearchableFoodList
 import com.example.sensible.ui.components.SensibleTopBar
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun FoodSearch(
+fun RecipeSearch(
     popBackStack: () -> Unit,
     onScanClick: () -> Unit,
+    viewModel: RecipeSearchViewModel = getViewModel(),
 ){
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     Scaffold(

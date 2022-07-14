@@ -2,8 +2,6 @@ package com.example.sensible.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -14,23 +12,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.example.sensible.models.DiaryEntry
-import com.example.sensible.models.FoodInterface
+import com.example.sensible.models.Product
 import com.example.sensible.models.Recipe
 import com.example.sensible.ui.theme.SensibleTheme
 import java.util.*
 import kotlin.collections.ArrayList
-
+/*
 @Composable
 fun FoodList(
     onItemClick: (String) -> Unit = {},
     state: MutableState<TextFieldValue>,
 
-    foods: List<FoodInterface>
+    foods: List<Product>
 ) {
-        var filteredFoods: List<FoodInterface>
+        var filteredFoods: List<Product>
         LazyColumn(
             contentPadding = PaddingValues(8.dp),
             modifier = Modifier.fillMaxWidth()
@@ -39,9 +35,9 @@ fun FoodList(
             filteredFoods = if (searchedText.isBlank()) {
                 foods
             } else {
-                val resultList = ArrayList<FoodInterface>()
+                val resultList = ArrayList<Product>()
                 for (food in foods) {
-                    if (food.name
+                    if (food.productName
                             .lowercase(Locale.getDefault())
                             .contains(
                                 searchedText.lowercase(Locale.getDefault())
@@ -55,9 +51,9 @@ fun FoodList(
             items(filteredFoods) { food ->
                 Box(Modifier.padding(2.dp)) {
                     FoodListItem(
-                        title = food.name,
+                        title = food.productName,
                         image = rememberAsyncImagePainter(food.imageURL),
-                        calories = food.calories,
+                        calories = food.caloriesKcal100g,
                         amount = food.amount,
                         onItemClick = onItemClick
                     )
@@ -111,4 +107,4 @@ fun searchableFoodListPreview(){
             onItemClick = {},
             foods = foods,)
     }
-}
+}*/

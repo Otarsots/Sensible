@@ -24,7 +24,7 @@ import com.example.sensible.ui.theme.SensibleTheme
 
 val allScreens = listOf(
     SensibleScreen.Home,
-    SensibleScreen.Diary,
+    SensibleScreen.DiaryEditor,
     SensibleScreen.RecipeList
 )
 

@@ -1,8 +1,19 @@
 package com.example.sensible.models
 
-class DiaryEntry(
+import androidx.room.*
+
+@Entity
+data class DiaryEntry(
+    @PrimaryKey
     val date: Long,
-    val foods: MutableList<FoodInterface>,
+    val calories: Double,
+    val carbs: Double,
+    val protein: Double,
+    val fats: Double,
+    val caloriesGoal: Double,
+    val carbsGoal: Double,
+    val proteinGoal: Double,
+    val fatsGoal: Double,
 ){
 
 }

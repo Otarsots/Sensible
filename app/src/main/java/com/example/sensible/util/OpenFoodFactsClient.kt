@@ -12,8 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.sensible.models.BarcodeRequestResult
 import com.example.sensible.models.Product
-import com.example.sensible.models.ProductResult
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -25,17 +26,16 @@ import retrofit2.http.Path
 
 
 interface OpenFoodFactsApi {
-    @GET("/api/v0/product/{code}")
-    suspend fun getProduct(@Path("code") code: Long) : Response<ProductResult>
+    @GET("https://world.openfoodfacts.org/api/v0/product/{code}.json?" +
+            "fields=product_name,code,energy-kcal_100g,carbohydrates_100g,fat_100g,proteins_100g")
+    suspend fun getProduct(@Path("code") code: Long) : Response<BarcodeRequestResult>
 }
 
 object RetrofitHelper {
 
     private const val baseUrl = "https://world.openfoodfacts.org/"
-    val contentType = "application/json".toMediaType()
 
-    var gson = GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
+    private var gson: Gson = GsonBuilder()
         .create()
 
     fun getInstance(): Retrofit {

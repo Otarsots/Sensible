@@ -7,18 +7,16 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.sensible.ui.diary.DiaryList
-import com.example.sensible.ui.diary.editor.DiaryEditor
-import com.example.sensible.ui.diary.search.FoodSearch
+import com.example.sensible.ui.diary.list.DiaryEditor
+import com.example.sensible.ui.diary.search.RecipeSearch
 import com.example.sensible.ui.home.HomeBody
-import com.example.sensible.ui.recipe.RecipeList
-import com.example.sensible.ui.scanner.BarcodeScreen
+import com.example.sensible.ui.components.BarcodeScreen
+import com.example.sensible.ui.recipe.editor.RecipeEditor
+import com.example.sensible.ui.recipe.list.RecipeList
 
 @Suppress("EnumEntryName")
 enum class Screen {
     home,
-    diaryList,
-    diaryCalendar,
     diaryEditor,
     diarySearch,
     recipeList,
@@ -38,54 +36,50 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
     ) {
 
         composable(Screen.home.name) {
-            HomeBody(
-
-            )
-        }
-        composable(Screen.diaryList.name) {
-            DiaryList(
-                entries = emptyList(),
-                onEntryClick = {},
-                onAddClick = {navController.navigate(Screen.diarySearch.name)},
-            )
-        }
-        composable(Screen.diaryCalendar.name){
-
-        }
-        composable(Screen.diarySearch.name){
-            FoodSearch(
-                popBackStack = {navController.popBackStack()},
-                onScanClick = {navController.navigate(Screen.barcodeScanner.name)}
-            )
+            HomeBody()
         }
         composable(
-            /*
             route = "${Screen.diaryEditor.name}?diaryId={diaryId}",
             arguments = listOf(
                 navArgument("diaryId"){
                     defaultValue = -1
-                    type = NavType.IntType
+                    type = NavType.LongType
                 })){ backStackEntry ->
             DiaryEditor(
-                diaryId = backStackEntry.arguments!!.getInt("diaryId"),
-                popBackStack = { navController.popBackStack() }
-
-             */
-            Screen.diaryEditor.name
-                ){
-            DiaryEditor(
-                diaryId = 1,
-                popBackStack = {navController.popBackStack()})
+                diaryId = backStackEntry.arguments!!.getLong("diaryId"),
+                entries = emptyList(),
+                navToRecipeEditor = {recipeId -> navController.navigate("${Screen.recipeEditor.name}?recipeId=$recipeId")},
+                onAddClick = {navController.navigate(Screen.recipeSearch.name)},
+                navToDate = {diaryId -> navController.navigate("${Screen.diaryEditor.name}?diaryId=$diaryId")}
+            )
+        }
+        composable(Screen.recipeSearch.name){
+            RecipeSearch(
+                popBackStack = {navController.popBackStack()},
+                onScanClick = {navController.navigate(Screen.barcodeScanner.name)}
+            )
         }
         composable(Screen.recipeList.name){
             RecipeList()
         }
-        composable(Screen.recipeEditor.name){
-
+        composable(
+            route = "${Screen.recipeEditor.name}?recipeId={recipeId}",
+            arguments = listOf(
+                navArgument("recipeId"){
+                    defaultValue = -1
+                    type = NavType.LongType
+                })){ backStackEntry ->
+            RecipeEditor(
+                recipeId = backStackEntry.arguments!!.getLong("recipeId"),
+                popBackStack = {navController.popBackStack()}
+            )
         }
         composable(Screen.barcodeScanner.name){
             BarcodeScreen(
-                onCodeScanned = {navController.popBackStack()}
+                onCodeScanned = {
+                    navController.popBackStack()
+                    navController.popBackStack()
+                }
             )
         }
     }

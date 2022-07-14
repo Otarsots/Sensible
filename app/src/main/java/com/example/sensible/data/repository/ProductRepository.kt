@@ -1,13 +1,20 @@
-package com.example.sensible.data
+package com.example.sensible.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.sensible.data.dao.ProductDao
 import com.example.sensible.models.Product
 import com.example.sensible.util.getProductData
 import kotlinx.coroutines.*
 
 class ProductRepository(private val productDao: ProductDao) {
 
+    val products = productDao.getProducts()
+
+    fun insert(product: Product) {
+        return productDao.insert(product)
+    }
+/*
     val allProducts: LiveData<List<Product>> = productDao.getAllProducts()
     val searchResults = MutableLiveData<List<Product>>()
 
@@ -57,4 +64,6 @@ class ProductRepository(private val productDao: ProductDao) {
         coroutineScope.async(Dispatchers.IO) {
             return@async productDao.findProduct(name)
         }.await()
+
+ */
 }
