@@ -1,6 +1,5 @@
 package com.example.sensible.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.sensible.models.Product
 import kotlinx.coroutines.flow.Flow
@@ -21,5 +20,5 @@ interface ProductDao {
     fun getProducts(): Flow<List<Product>>
 
     @Query("SELECT * FROM Product WHERE productId == :id")
-    fun getProduct(id: Int): Flow<Product?>
+    fun getProduct(id: Long): Flow<Product?>
 }

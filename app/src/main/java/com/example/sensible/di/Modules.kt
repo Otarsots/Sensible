@@ -68,7 +68,7 @@ val koinModule = module {
     }
 
     viewModel {
-        ProductSearchViewModel()
+        ProductSearchViewModel(get())
     }
 
 }

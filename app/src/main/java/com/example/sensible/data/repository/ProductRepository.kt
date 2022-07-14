@@ -1,11 +1,9 @@
 package com.example.sensible.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.sensible.data.dao.ProductDao
 import com.example.sensible.models.Product
 import com.example.sensible.util.getProductData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
 class ProductRepository(private val productDao: ProductDao) {
 
@@ -13,6 +11,26 @@ class ProductRepository(private val productDao: ProductDao) {
 
     fun insert(product: Product) {
         return productDao.insert(product)
+    }
+
+    fun update(product: Product) {
+        return productDao.update(product)
+    }
+
+    fun delete(product: Product) {
+        return productDao.delete(product)
+    }
+
+    fun getProduct(id: Long): Flow<Product?> {
+        return productDao.getProduct(id)
+    }
+
+    suspend fun fetchProduct(id: Long): Boolean {
+        val product = getProductData(id)
+        return if (product != null) {
+            insert(product)
+            true
+        } else false
     }
 /*
     val allProducts: LiveData<List<Product>> = productDao.getAllProducts()
