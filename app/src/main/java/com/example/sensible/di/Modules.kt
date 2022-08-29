@@ -2,6 +2,7 @@ package com.example.sensible.di
 
 import androidx.room.Room
 import com.example.sensible.data.AppDatabase
+import com.example.sensible.data.datastore
 import com.example.sensible.data.repository.*
 import com.example.sensible.ui.diary.list.DiaryEditorViewModel
 import com.example.sensible.ui.diary.search.RecipeSearchViewModel
@@ -20,6 +21,10 @@ val koinModule = module {
             AppDatabase::class.java,
             "database")
             .build()
+    }
+
+    factory {
+        androidContext().datastore
     }
 
     factory {

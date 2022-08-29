@@ -9,7 +9,7 @@ import com.example.sensible.R
 
 val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-/*
+
 enum class ColorTheme(
     @StringRes val themeName: Int
 ) {
@@ -17,7 +17,6 @@ enum class ColorTheme(
     White(R.string.app_theme_light),
     Black(R.string.app_theme_dark)
 }
- */
 
 sealed class AppPrefs<T>(val key: Preferences.Key<T>, val defaultValue: T) {
     object IsFirstRun : AppPrefs<Boolean>(
@@ -25,22 +24,30 @@ sealed class AppPrefs<T>(val key: Preferences.Key<T>, val defaultValue: T) {
         defaultValue = false
     )
 
-    object CurrentWorkout : AppPrefs<Int>(
-        key = intPreferencesKey("currentWorkout"),
+    object CalorieGoal : AppPrefs<Int>(
+        key = intPreferencesKey("calorieGoal"),
         defaultValue = -1
     )
 
-    object ShowBottomNavLabels : AppPrefs<Boolean>(
-        key = booleanPreferencesKey("showBottomNavLabels"),
-        defaultValue = true
+    object ProteinGoal : AppPrefs<Int>(
+        key = intPreferencesKey("proteinGoal"),
+        defaultValue = -1
     )
 
-    /*
+    object CarbGoal : AppPrefs<Double>(
+        key = doublePreferencesKey("carbGoal"),
+        defaultValue = 0.0
+    )
+
+    object FatGoal : AppPrefs<Double>(
+        key = doublePreferencesKey("fatGoal"),
+        defaultValue = 0.0
+    )
+
     object AppTheme : AppPrefs<String>(
         key = stringPreferencesKey("appTheme"),
         defaultValue = ColorTheme.FollowSystem.name
     )
-     */
 
     object UpdateRoutineAfterWorkout : AppPrefs<Boolean>(
         key = booleanPreferencesKey("updateRoutineAfterWorkout"),
@@ -52,7 +59,7 @@ suspend fun DataStore<Preferences>.resetAppSettings() {
     edit {
         it[AppPrefs.ShowBottomNavLabels.key] = AppPrefs.ShowBottomNavLabels.defaultValue
         it[AppPrefs.IsFirstRun.key] = AppPrefs.IsFirstRun.defaultValue
-        //it[AppPrefs.AppTheme.key] = AppPrefs.AppTheme.defaultValue
+        it[AppPrefs.AppTheme.key] = AppPrefs.AppTheme.defaultValue
         it[AppPrefs.UpdateRoutineAfterWorkout.key] = AppPrefs.UpdateRoutineAfterWorkout.defaultValue
     }
 }
