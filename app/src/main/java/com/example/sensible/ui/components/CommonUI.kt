@@ -1,6 +1,5 @@
 package com.example.sensible.ui.components
 
-import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -18,13 +16,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -34,7 +28,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
 import com.example.sensible.R
 import com.example.sensible.ui.theme.SensibleTheme
 @Composable
@@ -45,7 +38,7 @@ fun SensibleActionButton(
         onClick = onClick,
         content = {
             Icon(
-                painterResource(R.drawable.ic_launcher_add),
+                painterResource(R.drawable.ic_action_add),
                 contentDescription = null,
             )
         },
@@ -165,7 +158,7 @@ fun SearchBar(
                     onClick = onScanClick
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_launcher_barcode),
+                        painterResource(R.drawable.ic_action_barcode),
                         contentDescription = "",
                         modifier = Modifier
                             .padding(16.dp)
