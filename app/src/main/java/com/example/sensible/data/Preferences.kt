@@ -57,7 +57,7 @@ sealed class AppPrefs<T>(val key: Preferences.Key<T>, val defaultValue: T) {
 
 suspend fun DataStore<Preferences>.resetAppSettings() {
     edit {
-        it[AppPrefs.ShowBottomNavLabels.key] = AppPrefs.ShowBottomNavLabels.defaultValue
+        //it[AppPrefs.ShowBottomNavLabels.key] = AppPrefs.ShowBottomNavLabels.defaultValue
         it[AppPrefs.IsFirstRun.key] = AppPrefs.IsFirstRun.defaultValue
         it[AppPrefs.AppTheme.key] = AppPrefs.AppTheme.defaultValue
         it[AppPrefs.UpdateRoutineAfterWorkout.key] = AppPrefs.UpdateRoutineAfterWorkout.defaultValue

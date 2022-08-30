@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeDao {
 
     @Insert
-    suspend fun insert(recipe: Recipe)
+    suspend fun insert(recipe: Recipe): Long
 
     @Insert
     suspend fun insertWithProducts(recipe: Recipe, products: List<Product>)
 
     @Update
-    suspend fun update(product: Product)
+    suspend fun update(product: Recipe)
 
     @Update
     suspend fun updateWithProducts(recipe: Recipe, products: List<Product>)
@@ -30,10 +30,13 @@ interface RecipeDao {
     @Delete
     suspend fun delete(recipeProductCrossRef: RecipeProductCrossRef)
 
+    @Insert
+    suspend fun addProduct(recipeProductCrossRef: RecipeProductCrossRef)
+
     @Transaction
     @Query("SELECT * FROM Recipe")
     fun getRecipesWithProducts(): Flow<List<RecipeWithProducts>>
 
     @Query("SELECT * FROM Recipe WHERE recipeId == :recipeId")
-    fun getRecipe(recipeId: Int): Flow<Recipe?>
+    fun getRecipe(recipeId: Long): Flow<Recipe?>
 }

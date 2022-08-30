@@ -65,7 +65,7 @@ val koinModule = module {
     }
 
     viewModel { params ->
-        RecipeEditorViewModel(get(), params.get())
+        RecipeEditorViewModel(get(), get(), params.get())
     }
 
     viewModel {
