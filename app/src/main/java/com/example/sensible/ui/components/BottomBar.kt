@@ -34,7 +34,7 @@ fun BottomBar(
     showLabels: Boolean = true,
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
+    val currentRoute = backStackEntry?.destination?.route?.substringBefore("?")
 
     BottomNavigation {
         for (item in allScreens) {
@@ -51,7 +51,7 @@ fun BottomBar(
                 },
                 label = (@Composable { Text(stringResource(item.name)) }).takeIf { showLabels },
                 selected = item.route == currentRoute,
-                modifier = Modifier.scale(if (item.route == currentRoute) 1.2F else 1F),
+                modifier = Modifier.scale(if (item.route == currentRoute) 1.0F else 0.9F),
             )
         }
     }
