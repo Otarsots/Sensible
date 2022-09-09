@@ -17,6 +17,7 @@ class RecipeEditorViewModel(
 ): ViewModel() {
     private val _recipeFlow = recipeRepository.getRecipe(recipeId)
     private var _recipe: Recipe? = null
+    val recipe = recipeRepository.getRecipeWithProducts(recipeId)
 
     init {
         viewModelScope.launch {
@@ -39,7 +40,7 @@ class RecipeEditorViewModel(
     fun addProduct(productId: Long) {
         _recipe?.let { recipe ->
             viewModelScope.launch {
-                recipeRepository
+                recipeRepository.addProduct(recipe.recipeId,productId)
             }
         }
     }

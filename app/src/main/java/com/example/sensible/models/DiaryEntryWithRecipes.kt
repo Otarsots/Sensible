@@ -5,18 +5,19 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
-@Entity(primaryKeys = ["date", "recipeId"])
+@Entity(primaryKeys = ["date", "entryId"])
 data class DiaryEntryRecipeCrossRef (
     val date: Long,
-    val recipeId: Long
+    val entryId: Long
         )
 
-data class  DiaryEntryWithRecipes (
-    @Embedded val diaryEntry: DiaryEntry,
+data class  DayWithDiaryEntries (
+    @Embedded val day: Day,
     @Relation(
         parentColumn = "date",
-        entityColumn = "recipeId",
+        entityColumn = "entryId",
         associateBy = Junction(DiaryEntryRecipeCrossRef::class)
     )
-    val recipeList: List<Recipe>
+    val entries: entry
         )
+

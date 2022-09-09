@@ -18,7 +18,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.sensible.data.AppDatabase
-import com.example.sensible.di.koinModule
+import com.example.sensible.di.dataModule
+import com.example.sensible.di.networkModule
 import com.example.sensible.ui.components.BottomBar
 import com.example.sensible.ui.theme.SensibleTheme
 import com.example.sensible.ui.components.allScreens
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         startKoin {
             androidContext(this@MainActivity)
-            modules(koinModule)
+            modules(dataModule, networkModule)
         }
         setContent {
             SensibleApp()

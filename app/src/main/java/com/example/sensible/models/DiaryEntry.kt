@@ -4,16 +4,10 @@ import androidx.room.*
 
 @Entity
 data class DiaryEntry(
-    @PrimaryKey
-    val date: Long,
-    val calories: Double,
-    val carbs: Double,
-    val protein: Double,
-    val fats: Double,
-    val caloriesGoal: Double,
-    val carbsGoal: Double,
-    val proteinGoal: Double,
-    val fatsGoal: Double,
+    @PrimaryKey(autoGenerate = true)
+    val entryId: Long,
+    val amount: Long,
+    val recipeId: Long,
 ){
 
 }

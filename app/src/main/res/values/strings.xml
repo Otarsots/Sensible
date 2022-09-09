@@ -10,4 +10,6 @@
     <string name="app_theme_follow_system">System</string>
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>
+    <string name="hint_search">Search</string>
+    <string name="btn_pop_back">Back</string>
 </resources>

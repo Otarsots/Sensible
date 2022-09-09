@@ -36,10 +36,13 @@ fun RecipeSearch(
     ) {
         paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)){
+            /*
             SearchBar(
                 state = textState,
                 onScanClick = onScanClick
             )
+
+             */
         }
     }
 }

@@ -40,11 +40,14 @@ fun ProductSearch(
             paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)){
             Row() {
+                /*
                 SearchBar(
                     state = textState,
                     onScanClick = onScanClick
                 )
 
+
+                 */
             }
 
         }

@@ -34,8 +34,11 @@ interface RecipeDao {
     suspend fun addProduct(recipeProductCrossRef: RecipeProductCrossRef)
 
     @Transaction
+    @Query("SELECT * FROM Recipe WHERE recipeId == :recipeId")
+    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithProducts>
+
     @Query("SELECT * FROM Recipe")
-    fun getRecipesWithProducts(): Flow<List<RecipeWithProducts>>
+    fun getRecipes(): Flow<List<Recipe>>
 
     @Query("SELECT * FROM Recipe WHERE recipeId == :recipeId")
     fun getRecipe(recipeId: Long): Flow<Recipe?>

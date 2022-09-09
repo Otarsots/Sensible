@@ -1,5 +1,9 @@
 package com.example.sensible.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,8 +11,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -21,9 +27,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -115,76 +123,60 @@ fun FoodListItem(
 
 @Composable
 fun SearchBar(
-    state: MutableState<TextFieldValue>,
-    color: Color = MaterialTheme.colors.surface,
+    value: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onScanClick: () -> Unit ) {
-    OutlinedTextField(
-        value = state.value,
-        onValueChange = { value ->
-            state.value = value
-        },
-        modifier = modifier
-            .fillMaxWidth(),
-        textStyle = MaterialTheme.typography.body1,
-        leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(24.dp)
-            )
-        },
-        trailingIcon = {
-            if (state.value != TextFieldValue("")) {
-                IconButton(
-                    onClick = {
-                        state.value =
-                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
-                    }
-                ) {
-                    Icon(
-                        Icons.Default.Close,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(24.dp)
-                    )
-                }
-            }
-            else {
-                IconButton(
-                    onClick = onScanClick
-                ) {
-                    Icon(
-                        painterResource(R.drawable.ic_action_barcode),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(24.dp)
-                    )
-                }
-            }
-        },
+) {
+    BasicTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
         singleLine = true,
-        shape = RoundedCornerShape(32.dp), // The TextFiled has rounded corners top left and right by default
-        colors = TextFieldDefaults.textFieldColors(
-            /*
-            textColor = MaterialTheme.colors.onPrimary,
-            cursorColor = MaterialTheme.colors.onPrimary,
-            leadingIconColor = MaterialTheme.colors.onPrimary,
-            trailingIconColor = MaterialTheme.colors.onPrimary,
-
-            focusedIndicatorColor = MaterialTheme.colors.onPrimary.copy(0.75F),
-            unfocusedIndicatorColor = MaterialTheme.colors.onPrimary.copy(0.5F),
-             */
-            disabledIndicatorColor = Transparent,
-            backgroundColor = color,
-        )
+        textStyle = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onSurface),
+        cursorBrush = SolidColor(MaterialTheme.colors.onSurface),
+        decorationBox = { innerTextField ->
+            Surface(
+                modifier = Modifier.height(60.dp),
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Row(
+                    Modifier.padding(start = 24.dp, end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.Search, null)
+                    Spacer(Modifier.width(12.dp))
+                    Box(
+                        Modifier
+                            .padding(vertical = 16.dp)
+                            .weight(1f)
+                    ) {
+                        if (value.isEmpty()) {
+                            Text(
+                                stringResource(R.string.hint_search),
+                                style = MaterialTheme.typography.h6.copy(
+                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+                                )
+                            )
+                        }
+                        innerTextField()
+                    }
+                    AnimatedVisibility(
+                        value.isNotEmpty(),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        Spacer(Modifier.width(8.dp))
+                        IconButton(onClick = { onValueChange("") }) {
+                            Icon(Icons.Default.Clear, "")
+                        }
+                    }
+                }
+            }
+        }
     )
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun SearchViewPreview() {
@@ -193,6 +185,8 @@ fun SearchViewPreview() {
         SearchBar(textState, color = MaterialTheme.colors.primary) {}
     }
 }
+
+ */
 
 @Preview
 @Composable

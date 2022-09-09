@@ -1,11 +1,12 @@
 package com.example.sensible.data.repository
 
 import com.example.sensible.data.dao.ProductDao
+import com.example.sensible.di.OpenFoodFactsApi
 import com.example.sensible.models.Product
 import com.example.sensible.util.getProductData
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 
-class ProductRepository(private val productDao: ProductDao) {
+class ProductRepository(private val productDao: ProductDao, private val productApi: OpenFoodFactsApi) {
 
     val products = productDao.getProducts()
 
@@ -22,15 +23,19 @@ class ProductRepository(private val productDao: ProductDao) {
     }
 
     fun getProduct(id: Long): Flow<Product?> {
-        return productDao.getProduct(id)
+        val product = productDao.getProduct(id)
+        product.onEmpty { emitAll(fetchProduct(id)) }
+        return product
     }
 
-    suspend fun fetchProduct(id: Long): Boolean {
-        val product = getProductData(id)
-        return if (product != null) {
-            insert(product)
-            true
-        } else false
+    private suspend fun fetchProduct(id: Long): Flow<Product?> {
+        val product = productApi.getProduct(id)
+        product.map { product ->
+            if (product != null) {
+                insert(product)
+            }
+        }
+        return product
     }
 /*
     val allProducts: LiveData<List<Product>> = productDao.getAllProducts()

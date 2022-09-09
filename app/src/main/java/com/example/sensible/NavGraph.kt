@@ -60,7 +60,9 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
             )
         }
         composable(Screen.recipeList.name){
-            RecipeList()
+            RecipeList(
+                navToRecipeEditor = {recipeId -> navController.navigate("${Screen.recipeEditor.name}?recipeId=$recipeId")},
+            )
         }
         composable(
             route = "${Screen.recipeEditor.name}?recipeId={recipeId}",

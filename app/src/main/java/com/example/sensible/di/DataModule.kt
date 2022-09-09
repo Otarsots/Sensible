@@ -10,11 +10,16 @@ import com.example.sensible.ui.home.HomeViewModel
 import com.example.sensible.ui.recipe.editor.RecipeEditorViewModel
 import com.example.sensible.ui.recipe.list.RecipeListViewModel
 import com.example.sensible.ui.recipe.search.ProductSearchViewModel
+import com.example.sensible.util.OpenFoodFactsApi
+import com.example.sensible.util.RetrofitHelper
+import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-val koinModule = module {
+val dataModule = module {
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -40,7 +45,7 @@ val koinModule = module {
     }
 
     factory {
-        ProductRepository(productDao = get())
+        ProductRepository(productDao = get(), productApi = get())
     }
 
     factory {
@@ -69,7 +74,7 @@ val koinModule = module {
     }
 
     viewModel {
-        RecipeListViewModel()
+        RecipeListViewModel(get())
     }
 
     viewModel {
