@@ -7,6 +7,7 @@
     <string name="recipes_name">Recipes</string>
     <string name="recipes_editor_name">Edit recipe</string>
     <string name="recipes_search_name">Search product</string>
+    <string name="product_editor_name">Edit product</string>
     <string name="app_theme_follow_system">System</string>
     <string name="app_theme_light">Light</string>
     <string name="app_theme_dark">Dark</string>

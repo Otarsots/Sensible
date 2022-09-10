@@ -7,7 +7,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.sensible.data.resetAppSettings
-import com.example.sensible.di.koinModule
+import com.example.sensible.di.dataModule
+import com.example.sensible.di.networkModule
 import com.example.sensible.util.isFirstRun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ class SensibleApplication : Application() {
 
         startKoin {
             androidContext(this@SensibleApplication)
-            modules(koinModule)
+            modules(dataModule, networkModule)
         }
 
         scope.launch {

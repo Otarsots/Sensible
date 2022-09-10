@@ -7,11 +7,10 @@ import com.example.sensible.data.repository.*
 import com.example.sensible.ui.diary.list.DiaryEditorViewModel
 import com.example.sensible.ui.diary.search.RecipeSearchViewModel
 import com.example.sensible.ui.home.HomeViewModel
+import com.example.sensible.ui.product.editor.ProductEditorViewModel
 import com.example.sensible.ui.recipe.editor.RecipeEditorViewModel
 import com.example.sensible.ui.recipe.list.RecipeListViewModel
 import com.example.sensible.ui.recipe.search.ProductSearchViewModel
-import com.example.sensible.util.OpenFoodFactsApi
-import com.example.sensible.util.RetrofitHelper
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -45,7 +44,9 @@ val dataModule = module {
     }
 
     factory {
-        ProductRepository(productDao = get(), productApi = get())
+        ProductRepository(productDao = get(),
+            productApi = get()
+        )
     }
 
     factory {
@@ -70,7 +71,7 @@ val dataModule = module {
     }
 
     viewModel { params ->
-        RecipeEditorViewModel(get(), get(), params.get())
+        RecipeEditorViewModel(recipeRepository = get(), productRepository = get(), params.get())
     }
 
     viewModel {
@@ -79,6 +80,10 @@ val dataModule = module {
 
     viewModel {
         ProductSearchViewModel(get())
+    }
+
+    viewModel {params ->
+        ProductEditorViewModel(productRepository = get(), params.get())
     }
 
 }

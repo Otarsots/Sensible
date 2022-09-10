@@ -4,6 +4,7 @@ import androidx.room.*
 
 @Entity(
     primaryKeys = ["recipeId", "productId"],
+    /*
     foreignKeys = [
         ForeignKey(
             entity = Recipe::class,
@@ -12,22 +13,31 @@ import androidx.room.*
             onDelete = ForeignKey.CASCADE
         )
     ],
+
+     */
     indices = [
         Index(value = ["productId"])
     ])
 data class RecipeProductCrossRef(
     val recipeId: Long,
     val productId: Long,
+    val amount: Long,
 )
 
-data class RecipeWithProducts (
+@DatabaseView("SELECT * FROM RecipeProductCrossRef INNER JOIN Product ON RecipeProductCrossRef.productId = Product.productId")
+data class Ingredient(
+    @Embedded
+    val product: Product,
+    val amount: Long
+)
+
+data class RecipeWithIngredients (
     @Embedded
     val recipe: Recipe,
     @Relation(
         parentColumn = "recipeId",
         entityColumn = "productId",
-        entity = Product::class,
         associateBy = Junction(RecipeProductCrossRef::class),
     )
-    val productList: List<Product>
+    val productList: List<Ingredient>
 )

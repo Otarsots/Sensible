@@ -1,11 +1,10 @@
 package com.example.sensible.data.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.sensible.models.Product
 import com.example.sensible.models.Recipe
 import com.example.sensible.models.RecipeProductCrossRef
-import com.example.sensible.models.RecipeWithProducts
+import com.example.sensible.models.RecipeWithIngredients
 import kotlinx.coroutines.flow.Flow
 
 //TODO adapt from ProductDao
@@ -35,7 +34,7 @@ interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM Recipe WHERE recipeId == :recipeId")
-    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithProducts>
+    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients>
 
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): Flow<List<Recipe>>

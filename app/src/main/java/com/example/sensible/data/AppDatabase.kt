@@ -12,7 +12,9 @@ import com.google.gson.reflect.TypeToken
 
 
 
-@Database(entities = [(Product::class), (DiaryEntry::class), Recipe::class, RecipeProductCrossRef::class, DiaryEntryRecipeCrossRef::class], version = 1)
+@Database(entities = [Product::class, Day::class, Recipe::class, RecipeProductCrossRef::class, DiaryEntryRecipeCrossRef::class],
+    views = [Ingredient::class]
+    , version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract val productDao: ProductDao
@@ -23,22 +25,5 @@ abstract class AppDatabase: RoomDatabase() {
 
         private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
-
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        "database"
-                    ).fallbackToDestructiveMigration()
-                        .build()
-
-                    INSTANCE = instance
-                }
-                return instance
-            }
-        }
     }
 }

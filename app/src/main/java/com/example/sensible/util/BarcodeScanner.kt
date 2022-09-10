@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 @SuppressLint("UnsafeOptInUsageError")
 class BarCodeAnalyser(
-    private val onBarcodeDetected: (barcodes: List<Barcode>) -> Unit,
+    private val onBarcodeDetected: (Long) -> Unit,
 ): ImageAnalysis.Analyzer {
     private var lastAnalyzedTimeStamp = 0L
 
@@ -43,7 +43,7 @@ class BarCodeAnalyser(
                 barcodeScanner.process(imageToProcess)
                     .addOnSuccessListener { barcodes ->
                         if (barcodes.isNotEmpty()) {
-                            onBarcodeDetected(barcodes)
+                            barcodes[0].rawValue?.let { onBarcodeDetected(it.toLong()) }
                         } else {
                             Log.d("TAG", "analyze: No barcode Scanned")
                         }

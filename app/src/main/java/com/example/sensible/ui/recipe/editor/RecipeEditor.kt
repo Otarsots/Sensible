@@ -1,6 +1,5 @@
 package com.example.sensible.ui.recipe.editor
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,15 +18,16 @@ import com.example.sensible.ui.components.SensibleTopBar
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import com.example.sensible.R
-import com.example.sensible.models.Product
+import com.example.sensible.models.Ingredient
 import com.example.sensible.models.Recipe
+import com.example.sensible.ui.components.SensibleActionButton
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 
 @Composable
 fun RecipeEditor(
     recipeId: Long,
     popBackStack: () -> Unit = {},
+    navToScanner: () -> Unit = {},
     viewModel: RecipeEditorViewModel = getViewModel { parametersOf(recipeId) }
 ) {
     Scaffold(
@@ -39,6 +39,11 @@ fun RecipeEditor(
                     }
                 },
                 title = stringResource(R.string.recipes_editor_name),
+            )
+        },
+        floatingActionButton = {
+            SensibleActionButton (
+                onClick = {navToScanner()}
             )
         }
     ) { paddingValues ->
@@ -57,7 +62,7 @@ fun RecipeEditor(
 @Composable
 fun RecipeEditorContent(
     recipe: Recipe,
-    ingredients: List<Product>,
+    ingredients: List<Ingredient>,
     viewModel: RecipeEditorViewModel,
     modifier: Modifier,
 ) {
@@ -80,7 +85,9 @@ fun RecipeEditorContent(
                 onValueChange = setName
             )
         }
-        items(items = ingredients, key = {it.productId}) { product ->
+
+        items(items = ingredients, key = {it.product.productId}) { ingredient ->
+            val product = ingredient.product
             ListItem(
                 Modifier.clickable(
                     onClick = {}//TODO navigation to product editor
@@ -116,5 +123,6 @@ fun RecipeEditorContent(
                 }
             )
         }
+
     }
 }

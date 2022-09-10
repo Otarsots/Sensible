@@ -3,40 +3,42 @@ package com.example.sensible.data.repository
 import com.example.sensible.data.dao.ProductDao
 import com.example.sensible.di.OpenFoodFactsApi
 import com.example.sensible.models.Product
-import com.example.sensible.util.getProductData
 import kotlinx.coroutines.flow.*
 
-class ProductRepository(private val productDao: ProductDao, private val productApi: OpenFoodFactsApi) {
+class ProductRepository(private val productDao: ProductDao,
+                        private val productApi: OpenFoodFactsApi
+                        ) {
 
     val products = productDao.getProducts()
 
-    fun insert(product: Product) {
+    suspend fun insert(product: Product) {
         return productDao.insert(product)
     }
 
-    fun update(product: Product) {
+    suspend fun update(product: Product) {
         return productDao.update(product)
     }
 
-    fun delete(product: Product) {
+    suspend fun delete(product: Product) {
         return productDao.delete(product)
     }
 
     fun getProduct(id: Long): Flow<Product?> {
         val product = productDao.getProduct(id)
-        product.onEmpty { emitAll(fetchProduct(id)) }
+        product.onEmpty { emit(fetchProduct(id)) }
         return product
     }
 
-    private suspend fun fetchProduct(id: Long): Flow<Product?> {
-        val product = productApi.getProduct(id)
-        product.map { product ->
-            if (product != null) {
-                insert(product)
-            }
+    suspend fun fetchProduct(id: Long): Product? {
+        val res = productApi.getRequestResult(id)
+        val product = res.body()?.product
+        if (product != null) {
+            product.productId = id
+            insert(product)
         }
         return product
     }
+
 /*
     val allProducts: LiveData<List<Product>> = productDao.getAllProducts()
     val searchResults = MutableLiveData<List<Product>>()

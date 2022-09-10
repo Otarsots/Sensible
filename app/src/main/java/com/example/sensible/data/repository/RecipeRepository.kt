@@ -1,15 +1,9 @@
 package com.example.sensible.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.sensible.data.dao.ProductDao
 import com.example.sensible.data.dao.RecipeDao
-import com.example.sensible.models.Product
 import com.example.sensible.models.Recipe
 import com.example.sensible.models.RecipeProductCrossRef
-import com.example.sensible.models.RecipeWithProducts
-import com.example.sensible.util.getProductData
-import kotlinx.coroutines.*
+import com.example.sensible.models.RecipeWithIngredients
 import kotlinx.coroutines.flow.Flow
 
 //TODO adapt from ProductRepository
@@ -29,13 +23,13 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         return recipeDao.getRecipe(recipeId)
     }
 
-    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithProducts?> {
+    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients?> {
         return recipeDao.getRecipeWithProducts(recipeId)
     }
 
-    suspend fun addProduct(recipeId: Long, productId: Long) {
+    suspend fun addProduct(recipeId: Long, productId: Long, amount: Long) {
         return recipeDao.addProduct(
-            RecipeProductCrossRef(recipeId, productId)
+            RecipeProductCrossRef(recipeId, productId, amount)
         )
     }
 }

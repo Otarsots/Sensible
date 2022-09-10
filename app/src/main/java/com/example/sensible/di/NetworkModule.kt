@@ -2,8 +2,6 @@ package com.example.sensible.di
 
 import com.example.sensible.models.BarcodeRequestResult
 import com.example.sensible.models.Product
-import com.example.sensible.util.OpenFoodFactsApi
-import com.example.sensible.util.RetrofitHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.dsl.module
@@ -23,7 +21,7 @@ fun provideRetrofit(): Retrofit {
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 
-fun provideProductApi(retrofit: Retrofit): OpenFoodFactsApi = RetrofitHelper.getInstance().create(
+fun provideProductApi(retrofit: Retrofit): OpenFoodFactsApi = retrofit.create(
     OpenFoodFactsApi::class.java)
 
 interface OpenFoodFactsApi {

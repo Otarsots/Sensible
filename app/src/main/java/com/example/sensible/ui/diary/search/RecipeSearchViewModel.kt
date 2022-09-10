@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.sensible.data.repository.ProductRepository
 import com.example.sensible.data.repository.RecipeRepository
 import com.example.sensible.models.Product
-import com.example.sensible.util.OpenFoodFactsApi
-import com.example.sensible.util.getProductData
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

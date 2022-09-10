@@ -7,14 +7,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
 
-    @Insert
-    fun insert(product: Product)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(product: Product)
 
     @Update
-    fun update(product: Product)
+    suspend fun update(product: Product)
 
     @Delete
-    fun delete(product: Product)
+    suspend fun delete(product: Product)
 
     @Query("SELECT * FROM Product ORDER BY productName COLLATE NOCASE ASC")
     fun getProducts(): Flow<List<Product>>

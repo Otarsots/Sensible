@@ -8,6 +8,7 @@ import com.example.sensible.models.Recipe
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.temporal.TemporalAmount
 
 
 class RecipeEditorViewModel(
@@ -37,10 +38,10 @@ class RecipeEditorViewModel(
         }
     }
 
-    fun addProduct(productId: Long) {
+    fun addProduct(productId: Long, amount: Long) {
         _recipe?.let { recipe ->
             viewModelScope.launch {
-                recipeRepository.addProduct(recipe.recipeId,productId)
+                recipeRepository.addProduct(recipe.recipeId,productId, amount)
             }
         }
     }

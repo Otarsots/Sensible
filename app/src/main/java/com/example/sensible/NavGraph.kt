@@ -11,6 +11,7 @@ import com.example.sensible.ui.diary.list.DiaryEditor
 import com.example.sensible.ui.diary.search.RecipeSearch
 import com.example.sensible.ui.home.HomeBody
 import com.example.sensible.ui.components.BarcodeScreen
+import com.example.sensible.ui.product.editor.ProductEditor
 import com.example.sensible.ui.recipe.editor.RecipeEditor
 import com.example.sensible.ui.recipe.list.RecipeList
 
@@ -22,6 +23,7 @@ enum class Screen {
     recipeList,
     recipeEditor,
     recipeSearch,
+    productEditor,
     barcodeScanner,
     settings,
     goals
@@ -73,14 +75,27 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
                 })){ backStackEntry ->
             RecipeEditor(
                 recipeId = backStackEntry.arguments!!.getLong("recipeId"),
+                popBackStack = {navController.popBackStack()},
+                navToScanner = {navController.navigate(Screen.barcodeScanner.name)}
+            )
+        }
+        composable(
+            route = "${Screen.productEditor.name}?productId={productId}",
+            arguments = listOf(
+                navArgument("productId"){
+                    defaultValue = -1
+                    type = NavType.LongType
+                })){ backStackEntry ->
+            val code = backStackEntry.arguments!!.getLong("productId")
+            ProductEditor(
+                productId = code,
                 popBackStack = {navController.popBackStack()}
             )
         }
         composable(Screen.barcodeScanner.name){
             BarcodeScreen(
-                onCodeScanned = {
-                    navController.popBackStack()
-                    navController.popBackStack()
+                onCodeScanned = {productId ->
+                    navController.navigate("${Screen.productEditor.name}?productId=$productId")
                 }
             )
         }

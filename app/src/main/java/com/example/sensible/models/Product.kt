@@ -4,22 +4,21 @@ package com.example.sensible.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.time.temporal.TemporalAmount
 
 @Entity
 data class Product(
-    val amount: Long = 100,
+    //val amount: Long = 100,
     @SerializedName("carbohydrates_100g")
-    val carbohydrates100g: Double,
-    @SerializedName("id")
+    val carbohydrates100g: Double = 0.0,
+    @SerializedName("code")
     @PrimaryKey
-    val productId: Long,
+    var productId: Long = 0,
     @SerializedName("energy-kcal_100g")
-    val energyKcal100g: Double,
+    val energyKcal100g: Double = 0.0,
     @SerializedName("fat_100g")
-    val fat100g: Double,
+    val fat100g: Double = 0.0,
     @SerializedName("product_name")
-    val productName: String,
+    val productName: String = "",
     @SerializedName("proteins_100g")
-    val proteins100g: Double
+    val proteins100g: Double = 0.0
 )
