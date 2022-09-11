@@ -13,3 +13,4 @@ val Brown500 = Color(0xff795548)
 val Brown700 = Color(0xff5D4037)
 val Orange200 = Color(0xFFFFCC80)
 val Orange900 = Color(0xffE65100)
+val Carbs = Color.Red

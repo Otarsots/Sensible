@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.sensible.R
 import com.example.sensible.ui.theme.SensibleTheme
 @Composable
@@ -59,64 +60,80 @@ fun SensibleActionButton(
 @Composable
 fun FoodListItem(
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit = {},
+    onItemClick: () -> Unit = {},
+    trailing: @Composable (() -> Unit)? = null,
     title: String,
-    image: Painter,
+    image: String? = null,
     calories: Double,
-    amount: Long,
+    amount: Long? = null,
 ) {
     Surface(
         elevation = 4.dp,
         color = MaterialTheme.colors.surface,
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.fillMaxWidth().clickable { onItemClick }
+        modifier = modifier.height(72.dp).fillMaxWidth().clickable { onItemClick.invoke() }.padding(4.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
+            Row (horizontalArrangement = Arrangement.SpaceBetween){
                 Box(modifier = Modifier.padding(8.dp)) {
-                    Image(
-                        painter = image,
-                        contentDescription = "",
-                        modifier = Modifier
-                            // Set image size to 40 dp
-                            .size(56.dp)
-                            // Clip image to be shaped as a circle
-                            .clip(CircleShape)
-                            .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
-                            .background(MaterialTheme.colors.surface),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(Modifier.align(Alignment.CenterVertically)) {
-                    Column(horizontalAlignment = Alignment.Start) {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.subtitle2,
-                            color = MaterialTheme.colors.onSurface,
-                            maxLines = 2,
-                            modifier = Modifier.fillMaxWidth(0.7F),
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = "$amount g",
-                            style = MaterialTheme.typography.caption,
-                            color = MaterialTheme.colors.onSurface,
-                            modifier = Modifier.alpha(0.7F),
+                    if(image!= null){
+                        AsyncImage(
+                            model = image,
+                            contentDescription = "",
+                            modifier = Modifier
+                                // Set image size to 40 dp
+                                .size(48.dp)
+                                // Clip image to be shaped as a circle
+                                .clip(CircleShape)
+                                .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+                                .background(MaterialTheme.colors.surface),
+                            contentScale = ContentScale.Crop
                         )
                     }
+
                 }
+                Spacer(modifier = Modifier.width(8.dp))
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxHeight()) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.subtitle1,
+                            color = MaterialTheme.colors.onSurface,
+                            maxLines = 2,
+                            modifier = Modifier.fillMaxWidth(0.6F),
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        if (amount != null){
+                            Text(
+                                text = "$amount g",
+                                style = MaterialTheme.typography.caption,
+                                color = MaterialTheme.colors.onSurface,
+                                modifier = Modifier.alpha(0.7F),
+                            )
+                        }
+
+                    }
             }
             Text(
                 text = "$calories kcal",
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(4.dp)
                     .align(Alignment.CenterVertically),
                 color = MaterialTheme.colors.onSurface,
                 style = MaterialTheme.typography.subtitle2
             )
+            if (trailing != null) {
+                Box(
+                    Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(end = 4.dp)
+                        .requiredSize(44.dp)
+                ) { trailing() }
+            }
         }
     }
 }
@@ -192,6 +209,12 @@ fun SearchViewPreview() {
 @Composable
 fun FoodRowPreview(){
     SensibleTheme(darkTheme = false){
-        FoodListItem(title = "peanuts", image = painterResource(R.drawable.cola), calories = 100.0, amount = 1)
+        FoodListItem(title = "peanuts", image = null,calories = 100.0, amount = 1, trailing = {
+            Icon(
+                painterResource(R.drawable.ic_action_add),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize()
+            )
+        })
     }
 }

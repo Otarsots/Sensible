@@ -123,3 +123,11 @@ fun RecipeListContent(
         }
     }
 }
+/*
+FoodListItem(
+                onItemClick = { navToRecipeEditor(recipe.recipeId) },
+                title = recipe.name.takeIf { it.isNotBlank() }
+                    ?: "TODO",
+                calories = recipe.calories,
+            )
+ */

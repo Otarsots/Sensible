@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Product(
-    //val amount: Long = 100,
     @SerializedName("carbohydrates_100g")
     val carbohydrates100g: Double = 0.0,
     @SerializedName("code")
@@ -20,5 +19,7 @@ data class Product(
     @SerializedName("product_name")
     val productName: String = "",
     @SerializedName("proteins_100g")
-    val proteins100g: Double = 0.0
+    val proteins100g: Double = 0.0,
+    @SerializedName("image_url")
+    val imageUrl: String = ""
 )

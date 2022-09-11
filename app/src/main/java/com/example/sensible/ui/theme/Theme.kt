@@ -5,6 +5,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -29,6 +32,16 @@ private val LightColorPalette = lightColors(
     onSurface = Color.Black,
 )
 
+private val ExtLightColorPalette = ExtendedColors(LightColorPalette,Color.White,Color.LightGray,Color.Gray)
+private val ExtDarkColorPalette = ExtendedColors(DarkColorPalette,Color.White,Color.LightGray,Color.Gray)
+
+private val LocalColors = staticCompositionLocalOf { ExtDarkColorPalette }
+
+val MaterialTheme.extendedColors: ExtendedColors
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalColors.current
+
 @Composable
 fun SensibleTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val systemUiController = rememberSystemUiController()
@@ -43,16 +56,17 @@ fun SensibleTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     }
 
     val colors = if (darkTheme) {
-        DarkColorPalette
+        ExtDarkColorPalette
     } else {
-        LightColorPalette
+        ExtLightColorPalette
     }
 
-
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+    CompositionLocalProvider(LocalColors provides colors) {
+        MaterialTheme(
+            colors = colors.material,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
+    }
 }

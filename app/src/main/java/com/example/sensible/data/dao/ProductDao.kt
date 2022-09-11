@@ -20,5 +20,6 @@ interface ProductDao {
     fun getProducts(): Flow<List<Product>>
 
     @Query("SELECT * FROM Product WHERE productId == :id")
-    fun getProduct(id: Long): Flow<Product?>
+    fun getProduct(id: Long): Flow<Product>
+
 }

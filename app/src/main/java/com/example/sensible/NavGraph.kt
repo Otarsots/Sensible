@@ -73,25 +73,31 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
                     defaultValue = -1
                     type = NavType.LongType
                 })){ backStackEntry ->
+            val id = backStackEntry.arguments!!.getLong("recipeId")
             RecipeEditor(
-                recipeId = backStackEntry.arguments!!.getLong("recipeId"),
+                recipeId = id,
                 popBackStack = {navController.popBackStack()},
-                navToScanner = {navController.navigate(Screen.barcodeScanner.name)}
+                navToProduct = {productId -> navController.navigate("${Screen.productEditor.name}?productId=${productId}&recipeId=${id}")}
             )
         }
         composable(
-            route = "${Screen.productEditor.name}?productId={productId}",
+            route = "${Screen.productEditor.name}?productId={productId}&recipeId={recipeId}",
             arguments = listOf(
                 navArgument("productId"){
                     defaultValue = -1
                     type = NavType.LongType
+                },
+                navArgument("recipeId"){
+                    defaultValue = -1
+                    type = NavType.LongType
                 })){ backStackEntry ->
-            val code = backStackEntry.arguments!!.getLong("productId")
             ProductEditor(
-                productId = code,
+                productId = backStackEntry.arguments!!.getLong("productId"),
+                recipeId = backStackEntry.arguments!!.getLong("recipeId"),
                 popBackStack = {navController.popBackStack()}
             )
         }
+        /*
         composable(Screen.barcodeScanner.name){
             BarcodeScreen(
                 onCodeScanned = {productId ->
@@ -99,5 +105,7 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
                 }
             )
         }
+
+         */
     }
 }

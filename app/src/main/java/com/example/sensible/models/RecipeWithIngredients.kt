@@ -26,6 +26,7 @@ data class RecipeProductCrossRef(
 
 @DatabaseView("SELECT * FROM RecipeProductCrossRef INNER JOIN Product ON RecipeProductCrossRef.productId = Product.productId")
 data class Ingredient(
+    val recipeId: Long,
     @Embedded
     val product: Product,
     val amount: Long

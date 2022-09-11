@@ -1,6 +1,7 @@
 package com.example.sensible.data.repository
 
 import com.example.sensible.data.dao.RecipeDao
+import com.example.sensible.models.Ingredient
 import com.example.sensible.models.Recipe
 import com.example.sensible.models.RecipeProductCrossRef
 import com.example.sensible.models.RecipeWithIngredients
@@ -19,12 +20,16 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         recipeDao.update(recipe)
     }
 
-    fun getRecipe(recipeId: Long): Flow<Recipe?> {
+    fun getRecipe(recipeId: Long): Flow<Recipe> {
         return recipeDao.getRecipe(recipeId)
     }
 
-    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients?> {
+    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients> {
         return recipeDao.getRecipeWithProducts(recipeId)
+    }
+
+    fun getIngredient(recipeId: Long, productId: Long): Flow<Ingredient>{
+        return recipeDao.getIngredient(recipeId, productId)
     }
 
     suspend fun addProduct(recipeId: Long, productId: Long, amount: Long) {
@@ -32,4 +37,5 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
             RecipeProductCrossRef(recipeId, productId, amount)
         )
     }
+
 }

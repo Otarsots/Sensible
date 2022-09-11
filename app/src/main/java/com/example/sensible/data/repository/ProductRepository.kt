@@ -23,10 +23,8 @@ class ProductRepository(private val productDao: ProductDao,
         return productDao.delete(product)
     }
 
-    fun getProduct(id: Long): Flow<Product?> {
-        val product = productDao.getProduct(id)
-        product.onEmpty { emit(fetchProduct(id)) }
-        return product
+    fun getProduct(id: Long): Flow<Product> {
+        return productDao.getProduct(id)
     }
 
     suspend fun fetchProduct(id: Long): Product? {

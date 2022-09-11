@@ -83,7 +83,7 @@ val dataModule = module {
     }
 
     viewModel {params ->
-        ProductEditorViewModel(productRepository = get(), params.get())
+        ProductEditorViewModel(productRepository = get(), recipeRepository = get(), params.get())
     }
 
 }
