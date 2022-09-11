@@ -21,7 +21,7 @@ import androidx.room.*
 data class RecipeProductCrossRef(
     val recipeId: Long,
     val productId: Long,
-    val amount: Long,
+    val amount: Long = 100,
 )
 
 @DatabaseView("SELECT * FROM RecipeProductCrossRef INNER JOIN Product ON RecipeProductCrossRef.productId = Product.productId")
@@ -37,8 +37,9 @@ data class RecipeWithIngredients (
     val recipe: Recipe,
     @Relation(
         parentColumn = "recipeId",
-        entityColumn = "productId",
-        associateBy = Junction(RecipeProductCrossRef::class),
+        entityColumn = "recipeId",
+        entity = Ingredient::class,
+
     )
     val productList: List<Ingredient>
 )

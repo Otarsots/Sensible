@@ -16,7 +16,7 @@ import java.time.temporal.TemporalAmount
 class RecipeEditorViewModel(
     private val recipeRepository: RecipeRepository,
     private val productRepository: ProductRepository,
-    recipeId: Long,
+    private val recipeId: Long,
 ): ViewModel() {
     private val _recipeFlow = recipeRepository.getRecipe(recipeId)
     private var _recipe: Recipe? = null
@@ -72,5 +72,11 @@ class RecipeEditorViewModel(
         val proteinCals = protein.value.toFloat()*4
         val cals = carbCals + fatCals + proteinCals
         return listOf(carbCals/cals, fatCals/cals, proteinCals/cals)
+    }
+
+    fun removeIngredient(productId: Long) {
+        viewModelScope.launch {
+            recipeRepository.removeIngredient(recipeId, productId)
+        }
     }
 }

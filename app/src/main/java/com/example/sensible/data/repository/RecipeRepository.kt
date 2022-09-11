@@ -32,6 +32,10 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         return recipeDao.getIngredient(recipeId, productId)
     }
 
+    suspend fun removeIngredient(recipeId: Long, productId: Long){
+        return recipeDao.delete(RecipeProductCrossRef(recipeId,productId))
+    }
+
     suspend fun addProduct(recipeId: Long, productId: Long, amount: Long) {
         return recipeDao.addProduct(
             RecipeProductCrossRef(recipeId, productId, amount)

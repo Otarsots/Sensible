@@ -1,10 +1,12 @@
 package com.example.sensible.ui.recipe.editor
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -16,13 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.sensible.R
 import com.example.sensible.models.Ingredient
 import com.example.sensible.models.Recipe
-import com.example.sensible.ui.components.AnimatedCircle
-import com.example.sensible.ui.components.FoodListItem
-import com.example.sensible.ui.components.SensibleActionButton
-import com.example.sensible.ui.components.SensibleTopBar
+import com.example.sensible.ui.components.*
 import com.example.sensible.ui.theme.extendedColors
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -78,7 +78,7 @@ fun RecipeEditor(
         }
     }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun RecipeEditorContent(
     recipe: Recipe,
@@ -148,10 +148,10 @@ fun RecipeEditorContent(
                     color = MaterialTheme.extendedColors.protein
                 )
             }
-
+        }
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).fillMaxWidth()
             ) {
                 LazyColumn(
                     Modifier.fillMaxHeight().padding(8.dp),
@@ -165,17 +165,30 @@ fun RecipeEditorContent(
                     }
                     items(items = ingredients, key = { it.product.productId }) { ingredient ->
                         val product = ingredient.product
-                        FoodListItem(
-                            onItemClick = { navToProduct(product.productId) },
-                            title = product.productName.takeIf { it.isNotBlank() }
-                                ?: "TODO",
-                            image = product.imageUrl,
-                            amount = ingredient.amount,
-                            calories = product.energyKcal100g * ingredient.amount / 100
-                        )
+                        val dismissState = rememberDismissState()
+
+                        SwipeToDismiss(
+                            modifier = Modifier
+                                .animateItemPlacement()
+                                .zIndex(if (dismissState.offset.value == 0f) 0f else 1f),
+                            state = dismissState,
+                            background = { SwipeToDeleteBackground(dismissState) }
+                        ) {
+                            FoodListItem(
+                                onItemClick = { navToProduct(product.productId) },
+                                title = product.productName.takeIf { it.isNotBlank() }
+                                    ?: "TODO",
+                                image = product.imageUrl,
+                                amount = ingredient.amount,
+                                calories = product.energyKcal100g * ingredient.amount / 100
+                            )
+                        }
+
+                        if (dismissState.targetValue != DismissValue.Default) {
+                            viewModel.removeIngredient(product.productId)
+                        }
                     }
                 }
             }
-        }
     }
 }

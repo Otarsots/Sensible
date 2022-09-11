@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.sensible.R
 import com.example.sensible.models.Recipe
+import com.example.sensible.ui.components.FoodListItem
 import com.example.sensible.ui.components.SearchBar
 import com.example.sensible.ui.components.SensibleActionButton
 import com.example.sensible.ui.components.SensibleTopBar
@@ -82,39 +83,11 @@ fun RecipeListContent(
         }
 
         items(items = recipes, key = { it.recipeId }) { recipe ->
-            ListItem(
-                Modifier.clickable(
-                    onClick = {navToRecipeEditor(recipe.recipeId)}
-                ),
-                text = {
-                    Text(
-                        text = recipe.name.takeIf { it.isNotBlank() }
-                            ?: "TODO",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                trailing = {
-                    Box {
-                        var expanded by remember { mutableStateOf(false) }
-                        IconButton(onClick = { expanded = !expanded }) {
-                            Icon(Icons.Default.MoreVert, null)
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    expanded = false
-                                    scope.launch {}
-                                }
-                            ) {
-                                Text("")
-                            }
-                        }
-                    }
-                }
+            FoodListItem(
+                onItemClick = { navToRecipeEditor(recipe.recipeId) },
+                title = recipe.name.takeIf { it.isNotBlank() }
+                    ?: "TODO",
+                calories = recipe.calories,
             )
         }
         item {

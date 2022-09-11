@@ -25,6 +25,8 @@ class ProductEditorViewModel(
     private var _ingredient = MutableStateFlow<Ingredient>(Ingredient(recipeId = recipeId,
         product = Product(productId = productId),amount = 100))
 
+    val selectedList = mutableStateOf(mutableListOf<Long>())
+
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()
 
@@ -100,6 +102,7 @@ class ProductEditorViewModel(
         _protein.value = protein
     }
 
+
     fun getProportions(): List<Float>{
         val carbCals = _ingredient.value.product.carbohydrates100g.toFloat()*4
         val fatCals = _ingredient.value.product.fat100g.toFloat()*9
@@ -115,5 +118,6 @@ class ProductEditorViewModel(
         _protein.value = (_ingredient.value.product.proteins100g ?: 0.0) * amount / 100
         _amount.value = amount
     }
+
 
 }

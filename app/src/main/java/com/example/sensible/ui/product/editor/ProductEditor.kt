@@ -73,7 +73,8 @@ fun ProductEditor(
                         .border(
                             width = 4.dp,
                             color = MaterialTheme.colors.primary,
-                            shape = RoundedCornerShape(8.dp)),
+                            shape = RoundedCornerShape(8.dp)
+                        ),
                     model = image,
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
@@ -103,7 +104,9 @@ fun ProductEditor(
 
 
                     Column(
-                        modifier = Modifier.padding(16.dp).size(150.dp),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(150.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
 
