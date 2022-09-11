@@ -172,6 +172,8 @@ fun RecipeEditorContent(
                                 .animateItemPlacement()
                                 .zIndex(if (dismissState.offset.value == 0f) 0f else 1f),
                             state = dismissState,
+                            directions = setOf(DismissDirection.StartToEnd),
+                            dismissThresholds = {FractionalThreshold(0.7f)},
                             background = { SwipeToDeleteBackground(dismissState) }
                         ) {
                             FoodListItem(

@@ -24,6 +24,10 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         return recipeDao.getRecipe(recipeId)
     }
 
+    suspend fun updateIngredient(recipeId: Long, productId: Long, amount: Long) {
+        return recipeDao.updateIngredient(RecipeProductCrossRef(recipeId,productId,amount))
+    }
+
     fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients> {
         return recipeDao.getRecipeWithProducts(recipeId)
     }

@@ -8,6 +8,7 @@ import com.example.sensible.data.repository.RecipeRepository
 import com.example.sensible.models.Ingredient
 import com.example.sensible.models.Product
 import com.example.sensible.models.Recipe
+import com.example.sensible.models.RecipeProductCrossRef
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -24,8 +25,7 @@ class ProductEditorViewModel(
     private val productId = ids.second
     private var _ingredient = MutableStateFlow<Ingredient>(Ingredient(recipeId = recipeId,
         product = Product(productId = productId),amount = 100))
-
-    val selectedList = mutableStateOf(mutableListOf<Long>())
+    val ingredient = _ingredient.asStateFlow()
 
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()
@@ -102,6 +102,13 @@ class ProductEditorViewModel(
         _protein.value = protein
     }
 
+    fun save(onComplete: () -> Unit){
+        viewModelScope.launch {
+            recipeRepository.updateIngredient(recipeId, productId, amount.value)
+        }.invokeOnCompletion {
+            onComplete()
+        }
+    }
 
     fun getProportions(): List<Float>{
         val carbCals = _ingredient.value.product.carbohydrates100g.toFloat()*4

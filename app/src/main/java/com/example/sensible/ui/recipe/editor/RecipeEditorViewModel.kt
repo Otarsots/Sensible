@@ -1,10 +1,14 @@
 package com.example.sensible.ui.recipe.editor
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sensible.data.repository.ProductRepository
 import com.example.sensible.data.repository.RecipeRepository
+import com.example.sensible.models.Ingredient
+import com.example.sensible.models.Product
 import com.example.sensible.models.Recipe
+import com.example.sensible.models.RecipeWithIngredients
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -18,9 +22,8 @@ class RecipeEditorViewModel(
     private val productRepository: ProductRepository,
     private val recipeId: Long,
 ): ViewModel() {
-    private val _recipeFlow = recipeRepository.getRecipe(recipeId)
-    private var _recipe: Recipe? = null
-    val recipe = recipeRepository.getRecipeWithProducts(recipeId)
+    private var _recipe = MutableStateFlow<RecipeWithIngredients>(RecipeWithIngredients(Recipe(),emptyList()))
+    val recipe = _recipe.asStateFlow()
 
     private val _calories = MutableStateFlow<Double>(0.0)
     val calories = _calories.asStateFlow()
@@ -37,13 +40,17 @@ class RecipeEditorViewModel(
     init {
         viewModelScope.launch {
             launch {
-                _recipeFlow.collect {
-                    _recipe = it
+                recipeRepository.getRecipeWithProducts(recipeId).collect {
+                    _recipe.value = it
+                    /*
                     _calories.value = it.calories
                     _carbs.value = it.carbs
                     _fat.value = it.fat
                     _protein.value = it.protein
+
+                     */
                 }
+                updateNutriments()
             }
         }
     }
@@ -52,31 +59,62 @@ class RecipeEditorViewModel(
 
 
     fun updateName(name: String) {
-        _recipe?.let {
+        _recipe.let {
             viewModelScope.launch {
-                recipeRepository.update(it.copy(name = name))
+                recipeRepository.update(it.value.recipe.copy(name = name))
             }
         }
     }
 
     fun addProduct(productId: Long, amount: Long) {
-        _recipe?.let { recipe ->
             viewModelScope.launch {
-                recipeRepository.addProduct(recipe.recipeId,productId, amount)
+                recipeRepository.addProduct(recipeId,productId, amount)
+                updateNutriments()
             }
-        }
     }
     fun getProportions(): List<Float>{
-        val carbCals = carbs.value.toFloat()*4
-        val fatCals = fat.value.toFloat()*9
-        val proteinCals = protein.value.toFloat()*4
-        val cals = carbCals + fatCals + proteinCals
-        return listOf(carbCals/cals, fatCals/cals, proteinCals/cals)
+        recipe.let {
+            val carbCals = it.value.recipe.carbs.toFloat()*4
+            val fatCals = it.value.recipe.fat.toFloat()*9
+            val proteinCals = it.value.recipe.protein.toFloat()*4
+            val cals = carbCals + fatCals + proteinCals
+            return listOf(carbCals/cals, fatCals/cals, proteinCals/cals)
+        }?: return emptyList()
+
     }
 
     fun removeIngredient(productId: Long) {
         viewModelScope.launch {
             recipeRepository.removeIngredient(recipeId, productId)
+            updateNutriments()
         }
     }
+
+    private fun updateNutriments(){
+        viewModelScope.launch {
+            var calories = 0.0
+            var carbs = 0.0
+            var fat = 0.0
+            var protein = 0.0
+            recipeRepository.getRecipeWithProducts(recipeId).collect{res ->
+                val ingredients = res.productList
+                for(ing in ingredients) {
+                    calories += ing.product.energyKcal100g*ing.amount/100
+                    carbs += ing.product.carbohydrates100g*ing.amount/100
+                    fat += ing.product.fat100g*ing.amount/100
+                    protein += ing.product.proteins100g*ing.amount/100
+                }
+                /*
+                rec = res.recipe.copy(
+                    calories = calories,
+                    carbs = carbs,
+                    fat = fat,
+                    protein = protein)
+
+                 */
+                }
+            //recipeRepository.update(rec)
+            }
+        }
+
 }

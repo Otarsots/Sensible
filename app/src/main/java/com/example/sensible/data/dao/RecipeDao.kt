@@ -18,6 +18,9 @@ interface RecipeDao {
     suspend fun update(product: Recipe)
 
     @Update
+    suspend fun updateIngredient(recipeProductCrossRef: RecipeProductCrossRef)
+
+    @Update
     suspend fun updateWithProducts(recipe: Recipe, products: List<Product>)
 
     @Delete
