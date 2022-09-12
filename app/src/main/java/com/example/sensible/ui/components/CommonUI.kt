@@ -64,7 +64,7 @@ fun FoodListItem(
     trailing: @Composable (() -> Unit)? = null,
     title: String,
     image: String? = null,
-    calories: Double,
+    calories: Double? = null,
     amount: Long? = null,
 ) {
     Surface(
@@ -118,14 +118,16 @@ fun FoodListItem(
 
                     }
             }
-            Text(
-                text = "$calories kcal",
-                modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.CenterVertically),
-                color = MaterialTheme.colors.onSurface,
-                style = MaterialTheme.typography.subtitle2
-            )
+            if(calories != null) {
+                Text(
+                    text = "$calories kcal",
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .align(Alignment.CenterVertically),
+                    color = MaterialTheme.colors.onSurface,
+                    style = MaterialTheme.typography.subtitle2
+                )
+            }
             if (trailing != null) {
                 Box(
                     Modifier

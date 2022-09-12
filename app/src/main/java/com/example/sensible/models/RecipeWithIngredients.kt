@@ -4,17 +4,20 @@ import androidx.room.*
 
 @Entity(
     primaryKeys = ["recipeId", "productId"],
-    /*
     foreignKeys = [
         ForeignKey(
             entity = Recipe::class,
             parentColumns = ["recipeId"],
             childColumns = ["recipeId"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Product::class,
+            parentColumns = ["productId"],
+            childColumns = ["productId"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
-
-     */
     indices = [
         Index(value = ["productId"])
     ])
@@ -32,6 +35,7 @@ data class Ingredient(
     val amount: Long
 )
 
+/*
 data class RecipeWithIngredients (
     @Embedded
     val recipe: Recipe,
@@ -43,3 +47,4 @@ data class RecipeWithIngredients (
     )
     val productList: List<Ingredient>
 )
+*/

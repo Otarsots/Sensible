@@ -11,20 +11,11 @@ interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: Recipe): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWithProducts(recipe: Recipe, products: List<Product>)
-
     @Update
     suspend fun update(product: Recipe)
 
     @Update
     suspend fun updateIngredient(recipeProductCrossRef: RecipeProductCrossRef)
-
-    @Update
-    suspend fun updateWithProducts(recipe: Recipe, products: List<Product>)
-
-    @Delete
-    suspend fun delete(recipe: Recipe)
 
     @Delete
     suspend fun delete(recipeProductCrossRef: RecipeProductCrossRef)
@@ -32,14 +23,27 @@ interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProduct(recipeProductCrossRef: RecipeProductCrossRef)
 
-    @Transaction
-    @Query("SELECT * FROM Recipe WHERE recipeId == :recipeId")
-    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients>
+    @Query("SELECT SUM(energyKcal100g/100*amount) as calories, " +
+            "SUM(carbohydrates100g/100*amount) as carbs," +
+            "SUM(fat100g/100*amount) as fat," +
+            "SUM(proteins100g/100*amount) as protein FROM Ingredient WHERE recipeId == :recipeId")
+    fun getNutrients(recipeId: Long): Flow<Nutrients>
+
+    /*
+    @Query("DELETE FROM RecipeProductCrossRef WHERE recipeId == :recipeId")
+    suspend fun deleteIngredients(recipeId: Long)
+     */
+
+    @Query("DELETE FROM Recipe WHERE recipeId == :recipeId")
+    suspend fun deleteRecipe(recipeId: Long)
 
     @Transaction
     @Query("SELECT * FROM Ingredient WHERE (productId == :productId AND recipeId == :recipeId)")
     fun getIngredient(recipeId: Long, productId: Long): Flow<Ingredient>
 
+    @Transaction
+    @Query("SELECT * FROM Ingredient WHERE recipeId == :recipeId")
+    fun getIngredients(recipeId: Long): Flow<List<Ingredient>>
 
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): Flow<List<Recipe>>

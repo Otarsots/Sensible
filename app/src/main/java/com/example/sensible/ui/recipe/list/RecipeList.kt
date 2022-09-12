@@ -1,10 +1,12 @@
 package com.example.sensible.ui.recipe.list
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -13,12 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.sensible.R
 import com.example.sensible.models.Recipe
-import com.example.sensible.ui.components.FoodListItem
-import com.example.sensible.ui.components.SearchBar
-import com.example.sensible.ui.components.SensibleActionButton
-import com.example.sensible.ui.components.SensibleTopBar
+import com.example.sensible.ui.components.*
 import com.example.sensible.ui.recipe.list.RecipeListViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -58,7 +58,7 @@ fun RecipeList(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun RecipeListContent(
     recipes: List<Recipe>,
@@ -68,31 +68,52 @@ fun RecipeListContent(
 ) {
     val scope = rememberCoroutineScope()
 
-    LazyColumn(
-        modifier
-            .fillMaxHeight()) {
-        item {
-            val nameFilter by viewModel.nameFilter.collectAsState()
-            SearchBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                value = nameFilter,
-                onValueChange = viewModel::setNameFilter
-            )
-        }
+    Surface(
+        modifier = Modifier
+            .padding(4.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        LazyColumn(
+            modifier
+                .fillMaxHeight()
+        ) {
+            item {
+                val nameFilter by viewModel.nameFilter.collectAsState()
+                SearchBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    value = nameFilter,
+                    onValueChange = viewModel::setNameFilter
+                )
+            }
 
-        items(items = recipes, key = { it.recipeId }) { recipe ->
-            FoodListItem(
-                onItemClick = { navToRecipeEditor(recipe.recipeId) },
-                title = recipe.name.takeIf { it.isNotBlank() }
-                    ?: "TODO",
-                calories = recipe.calories,
-            )
-        }
-        item {
-            // Fix FAB overlap
-            Box(Modifier.height(72.dp)) {}
+            items(items = recipes, key = { it.recipeId }) { recipe ->
+                val dismissState = rememberDismissState()
+
+                SwipeToDismiss(
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .zIndex(if (dismissState.offset.value == 0f) 0f else 1f),
+                    state = dismissState,
+                    directions = setOf(DismissDirection.StartToEnd),
+                    dismissThresholds = { FractionalThreshold(0.7f) },
+                    background = { SwipeToDeleteBackground(dismissState) }
+                ) {
+                    FoodListItem(
+                        onItemClick = { navToRecipeEditor(recipe.recipeId) },
+                        title = recipe.name.takeIf { it.isNotBlank() }
+                            ?: "unnamed",
+                    )
+                }
+                if (dismissState.targetValue != DismissValue.Default) {
+                    viewModel.deleteRecipe(recipe.recipeId)
+                }
+            }
+            item {
+                // Fix FAB overlap
+                Box(Modifier.height(72.dp)) {}
+            }
         }
     }
 }

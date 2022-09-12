@@ -33,4 +33,10 @@ class RecipeListViewModel(
             onComplete(id)
         }
     }
+
+    fun deleteRecipe(recipeId: Long) {
+        viewModelScope.launch {
+            repository.deleteRecipe(recipeId)
+        }
+    }
 }

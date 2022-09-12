@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,8 +43,10 @@ fun RecipeEditor(
         onResult = { result ->
             val id = result.contents.toLong()
             viewModel.getProduct(id)
-            viewModel.addProduct(id, 100)
-            navToProduct(id)}
+            viewModel.addProduct(id, 100) {
+                navToProduct(id)
+            }
+            }
     )
     Scaffold(
         topBar = {
@@ -58,136 +61,159 @@ fun RecipeEditor(
         },
         floatingActionButton = {
             SensibleActionButton (
-                onClick = {scanLauncher.launch(ScanOptions()
+                onClick = {try{
+                    scanLauncher.launch(ScanOptions()
                     .setBeepEnabled(false)
                     .setDesiredBarcodeFormats(ScanOptions.PRODUCT_CODE_TYPES)
                     .setPrompt("Scan your product")
-                    )}
+                    )}finally {
+                        popBackStack()
+                    }}
             )
         }
     ) { paddingValues ->
-        val recipe by viewModel.recipe.collectAsState(initial = null)
-            recipe?.let { recipe ->
-                RecipeEditorContent(
-                    recipe = recipe.recipe,
-                    ingredients = recipe.productList,
-                    navToProduct = navToProduct,
-                    viewModel = viewModel,
-                    modifier = Modifier.padding(paddingValues))
-            }
+            RecipeEditorContent(
+                navToProduct = navToProduct,
+                viewModel = viewModel,
+                modifier = Modifier.padding(paddingValues))
         }
     }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun RecipeEditorContent(
-    recipe: Recipe,
-    ingredients: List<Ingredient>,
     navToProduct: (Long) -> Unit,
     viewModel: RecipeEditorViewModel,
     modifier: Modifier,
 ) {
-    val calories by viewModel.calories.collectAsState()
-    val carbs by viewModel.carbs.collectAsState()
-    val fat by viewModel.fat.collectAsState()
-    val protein by viewModel.protein.collectAsState()
+    val name by viewModel.name.collectAsState()
+    val nutrients by viewModel.nutrients.collectAsState()
+    val ingredients by viewModel.ingredients.collectAsState()
+
     Column {
-        val (name, setName) = remember { mutableStateOf(recipe.name) }
         LaunchedEffect(name) {
             viewModel.updateName(name)
         }
-        val (nameLineCount, setNameLineCount) = remember { mutableStateOf(0) }
-        OutlinedTextField(
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            //color = MaterialTheme.colors.primary,
             modifier = Modifier
+                .padding(4.dp)
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = 30.dp, end = 30.dp),
-            value = name,
-            label = { Text("Name") },
-            onValueChange = setName
-        )
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            //verticalAlignment = Alignment.Top
-        )
-        {
-            AnimatedCircle(
-                modifier = Modifier
-                    .size(200.dp)
-                    .padding(16.dp),
-                proportions = viewModel.getProportions(),
-                colors = listOf(
-                    MaterialTheme.extendedColors.carbs,
-                    MaterialTheme.extendedColors.fat,
-                    MaterialTheme.extendedColors.protein
+        ) {
+            Column {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, start = 30.dp, end = 30.dp),
+                    value = name,
+                    label = { Text("Name") },
+                    onValueChange = { viewModel.setName(it) },
+                    singleLine = true,
                 )
-            )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    //verticalAlignment = Alignment.Top
+                )
+                {
+                    AnimatedCircle(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .padding(16.dp),
+                        proportions = viewModel.getProportions(),
+                        colors = listOf(
+                            MaterialTheme.extendedColors.carbs,
+                            MaterialTheme.extendedColors.fat,
+                            MaterialTheme.extendedColors.protein
+                        )
+                    )
 
 
-            Column(
-                modifier = Modifier.padding(16.dp).size(150.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(150.dp),
+                        verticalArrangement = Arrangement.Center
+                    ) {
 
-                Text(
-                    text = "Calories: ${calories}kcal",
-                    style = MaterialTheme.typography.body2,
-                )
-                Text(
-                    text = "Carbohydrates: ${carbs}g",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.extendedColors.carbs
-                )
-                Text(
-                    text = "Fat: ${fat}g",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.extendedColors.fat
-                )
-                Text(
-                    text = "Protein: ${protein}g",
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.extendedColors.protein
-                )
+                        Text(
+                            text = "Calories: ${nutrients.calories}kcal",
+                            style = MaterialTheme.typography.body2,
+                        )
+                        Text(
+                            text = "Carbohydrates: ${nutrients.carbs}g",
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.extendedColors.carbs
+                        )
+                        Text(
+                            text = "Fat: ${nutrients.fat}g",
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.extendedColors.fat
+                        )
+                        Text(
+                            text = "Protein: ${nutrients.protein}g",
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.extendedColors.protein
+                        )
+                    }
+                }
             }
         }
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.padding(8.dp).fillMaxWidth()
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
             ) {
-                LazyColumn(
-                    Modifier.fillMaxHeight().padding(8.dp),
-                    contentPadding = PaddingValues(bottom = 70.dp),
-                ) {
-                    item {
-                        Text(
-                            text = "Ingredients:",
-                            style = MaterialTheme.typography.subtitle1
-                        )
-                    }
-                    items(items = ingredients, key = { it.product.productId }) { ingredient ->
-                        val product = ingredient.product
-                        val dismissState = rememberDismissState()
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Ingredients:",
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                    )
+                    Surface(
 
-                        SwipeToDismiss(
-                            modifier = Modifier
-                                .animateItemPlacement()
-                                .zIndex(if (dismissState.offset.value == 0f) 0f else 1f),
-                            state = dismissState,
-                            directions = setOf(DismissDirection.StartToEnd),
-                            dismissThresholds = {FractionalThreshold(0.7f)},
-                            background = { SwipeToDeleteBackground(dismissState) }
+                    ) {
+
+                        LazyColumn(
+                            Modifier
+                                .fillMaxSize(),
+                                //.padding(4.dp),
+                            contentPadding = PaddingValues(
+                                top = 4.dp,
+                                bottom = 70.dp),
                         ) {
-                            FoodListItem(
-                                onItemClick = { navToProduct(product.productId) },
-                                title = product.productName.takeIf { it.isNotBlank() }
-                                    ?: "TODO",
-                                image = product.imageUrl,
-                                amount = ingredient.amount,
-                                calories = product.energyKcal100g * ingredient.amount / 100
-                            )
-                        }
+                            items(
+                                items = ingredients,
+                                key = { it.product.productId }) { ingredient ->
+                                val product = ingredient.product
+                                val dismissState = rememberDismissState()
 
-                        if (dismissState.targetValue != DismissValue.Default) {
-                            viewModel.removeIngredient(product.productId)
+                                SwipeToDismiss(
+                                    modifier = Modifier
+                                        .animateItemPlacement()
+                                        .zIndex(if (dismissState.offset.value == 0f) 0f else 1f),
+                                    state = dismissState,
+                                    directions = setOf(DismissDirection.StartToEnd),
+                                    dismissThresholds = { FractionalThreshold(0.7f) },
+                                    background = { SwipeToDeleteBackground(dismissState) }
+                                ) {
+                                    FoodListItem(
+                                        onItemClick = { navToProduct(product.productId) },
+                                        title = product.productName.takeIf { it.isNotBlank() }
+                                            ?: "TODO",
+                                        image = product.imageUrl,
+                                        amount = ingredient.amount,
+                                        calories = product.energyKcal100g * ingredient.amount / 100
+                                    )
+                                }
+
+                                if (dismissState.targetValue != DismissValue.Default) {
+                                    viewModel.removeIngredient(product.productId)
+                                }
+                            }
                         }
                     }
                 }

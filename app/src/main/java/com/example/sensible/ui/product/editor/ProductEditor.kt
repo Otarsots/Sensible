@@ -58,93 +58,118 @@ fun ProductEditor(
                         Image(
                             painterResource(id = R.drawable.ic_action_check),
                             contentDescription ="",
-                            modifier = Modifier.padding(2.dp).size(28.dp).clickable {
-                                viewModel.save(popBackStack)
-                            },
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .size(28.dp)
+                                .clickable {
+                                    viewModel.save(popBackStack)
+                                },
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface))
                 }
             )
         }
     ) { padding ->
+        Surface(
+            modifier = Modifier
+                .padding(padding)
+                .padding(4.dp),
+            color = MaterialTheme.colors.primary,
+            shape = RoundedCornerShape(8.dp)
+        ) {
             Column(
-                modifier = Modifier.padding(padding),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
 
 
                 Text(
                     text = name,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
                 )
-
-                AsyncImage(
-                    modifier = Modifier
-                        .size(200.dp)
-                        .clip(shape = RoundedCornerShape(8.dp))
-                        .border(
-                            width = 4.dp,
-                            color = MaterialTheme.colors.primary,
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    model = image,
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null,
-                )
-                val amount by viewModel.amount.collectAsState()
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                    value = "$amount",
-                    onValueChange = {viewModel.setAmount(it.toLongOrDefault(0)) },
-                    label = {Text("Amount in grams")},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true,
-                )
-                Row (
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    //verticalAlignment = Alignment.Top
-                        )
-                {
-                    AnimatedCircle(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .padding(16.dp),
-                        proportions = viewModel.getProportions(),
-                        colors = listOf(MaterialTheme.extendedColors.carbs, MaterialTheme.extendedColors.fat, MaterialTheme.extendedColors.protein))
-
-
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(150.dp),
-                        verticalArrangement = Arrangement.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top
                     ) {
+                        Spacer(modifier = Modifier.size(48.dp))
+                        AsyncImage(
+                            modifier = Modifier
+                                .size(240.dp)
+                                .clip(shape = RoundedCornerShape(8.dp))
+                                .border(
+                                    width = 4.dp,
+                                    color = MaterialTheme.colors.primary,
+                                    shape = RoundedCornerShape(8.dp)
+                                ),
+                            model = image,
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                        )
+                        val amount by viewModel.amount.collectAsState()
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            value = "$amount",
+                            onValueChange = { viewModel.setAmount(it.toLongOrDefault(0)) },
+                            label = { Text("Amount in grams") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            //verticalAlignment = Alignment.Top
+                        )
+                        {
+                            AnimatedCircle(
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .padding(16.dp),
+                                proportions = viewModel.getProportions(),
+                                colors = listOf(
+                                    MaterialTheme.extendedColors.carbs,
+                                    MaterialTheme.extendedColors.fat,
+                                    MaterialTheme.extendedColors.protein
+                                )
+                            )
 
-                        Text(
-                            text = "Calories: ${calories}kcal",
-                            style = MaterialTheme.typography.body2,
-                        )
-                        Text(
-                            text = "Carbohydrates: ${carbs}g",
-                            style = MaterialTheme.typography.body2,
-                            color = MaterialTheme.extendedColors.carbs
-                        )
-                        Text(
-                            text = "Fat: ${fat}g",
-                            style = MaterialTheme.typography.body2,
-                            color = MaterialTheme.extendedColors.fat
-                        )
-                        Text(
-                            text = "Protein: ${protein}g",
-                            style = MaterialTheme.typography.body2,
-                            color = MaterialTheme.extendedColors.protein
-                        )
+
+                            Column(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .size(150.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+
+                                Text(
+                                    text = "Calories: ${calories}kcal",
+                                    style = MaterialTheme.typography.body2,
+                                )
+                                Text(
+                                    text = "Carbohydrates: ${carbs}g",
+                                    style = MaterialTheme.typography.body2,
+                                    color = MaterialTheme.extendedColors.carbs
+                                )
+                                Text(
+                                    text = "Fat: ${fat}g",
+                                    style = MaterialTheme.typography.body2,
+                                    color = MaterialTheme.extendedColors.fat
+                                )
+                                Text(
+                                    text = "Protein: ${protein}g",
+                                    style = MaterialTheme.typography.body2,
+                                    color = MaterialTheme.extendedColors.protein
+                                )
+                            }
+                        }
+
                     }
                 }
             }
-        }
 
+        }
+    }
     }

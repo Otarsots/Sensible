@@ -2,12 +2,11 @@ package com.example.sensible.data.repository
 
 import com.example.sensible.data.dao.RecipeDao
 import com.example.sensible.models.Ingredient
+import com.example.sensible.models.Nutrients
 import com.example.sensible.models.Recipe
 import com.example.sensible.models.RecipeProductCrossRef
-import com.example.sensible.models.RecipeWithIngredients
 import kotlinx.coroutines.flow.Flow
 
-//TODO adapt from ProductRepository
 class RecipeRepository(private val recipeDao: RecipeDao) {
 
     val recipes = recipeDao.getRecipes()
@@ -24,12 +23,22 @@ class RecipeRepository(private val recipeDao: RecipeDao) {
         return recipeDao.getRecipe(recipeId)
     }
 
+    suspend fun deleteRecipe(recipeId: Long){
+        //recipeDao.deleteIngredients(recipeId)
+        recipeDao.deleteRecipe(recipeId)
+
+    }
+
     suspend fun updateIngredient(recipeId: Long, productId: Long, amount: Long) {
         return recipeDao.updateIngredient(RecipeProductCrossRef(recipeId,productId,amount))
     }
 
-    fun getRecipeWithProducts(recipeId: Long): Flow<RecipeWithIngredients> {
-        return recipeDao.getRecipeWithProducts(recipeId)
+    fun getNutrients(recipeId: Long): Flow<Nutrients> {
+        return recipeDao.getNutrients(recipeId)
+    }
+
+    fun getIngredients(recipeId: Long): Flow<List<Ingredient>>{
+        return recipeDao.getIngredients(recipeId)
     }
 
     fun getIngredient(recipeId: Long, productId: Long): Flow<Ingredient>{

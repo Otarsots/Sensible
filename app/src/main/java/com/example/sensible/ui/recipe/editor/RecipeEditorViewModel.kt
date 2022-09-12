@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sensible.data.repository.ProductRepository
 import com.example.sensible.data.repository.RecipeRepository
-import com.example.sensible.models.Ingredient
-import com.example.sensible.models.Product
-import com.example.sensible.models.Recipe
-import com.example.sensible.models.RecipeWithIngredients
+import com.example.sensible.models.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -22,99 +19,75 @@ class RecipeEditorViewModel(
     private val productRepository: ProductRepository,
     private val recipeId: Long,
 ): ViewModel() {
-    private var _recipe = MutableStateFlow<RecipeWithIngredients>(RecipeWithIngredients(Recipe(),emptyList()))
+    private var _recipe = MutableStateFlow<Recipe>((Recipe()))
     val recipe = _recipe.asStateFlow()
 
-    private val _calories = MutableStateFlow<Double>(0.0)
-    val calories = _calories.asStateFlow()
+    private var _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
 
-    private val _carbs = MutableStateFlow<Double>(0.0)
-    val carbs = _carbs.asStateFlow()
+    private var _ingredients = MutableStateFlow<List<Ingredient>>(emptyList())
+    val ingredients = _ingredients.asStateFlow()
 
-    private val _fat = MutableStateFlow<Double>(0.0)
-    val fat = _fat.asStateFlow()
-
-    private val _protein = MutableStateFlow<Double>(0.0)
-    val protein = _protein.asStateFlow()
+    private var _nutrients = MutableStateFlow<Nutrients>(Nutrients())
+    val nutrients = _nutrients.asStateFlow()
 
     init {
         viewModelScope.launch {
             launch {
-                recipeRepository.getRecipeWithProducts(recipeId).collect {
+                recipeRepository.getRecipe(recipeId).collect {
                     _recipe.value = it
-                    /*
-                    _calories.value = it.calories
-                    _carbs.value = it.carbs
-                    _fat.value = it.fat
-                    _protein.value = it.protein
-
-                     */
+                    _name.value = it.name
                 }
-                updateNutriments()
+            }
+            launch {
+                recipeRepository.getIngredients(recipeId).collect {
+                    _ingredients.value = it
+                }
+            }
+            launch {
+                recipeRepository.getNutrients(recipeId).collect{
+                    _nutrients.value = it
+                }
             }
         }
     }
 
     fun getProduct(productId: Long) = runBlocking { productRepository.fetchProduct(productId) }
 
+    fun setName(name: String) {
+        _name.value = name
+    }
 
     fun updateName(name: String) {
         _recipe.let {
             viewModelScope.launch {
-                recipeRepository.update(it.value.recipe.copy(name = name))
+                recipeRepository.update(it.value.copy(name = name))
             }
         }
     }
 
-    fun addProduct(productId: Long, amount: Long) {
+    fun addProduct(productId: Long, amount: Long, onComplete: () -> Unit) {
             viewModelScope.launch {
                 recipeRepository.addProduct(recipeId,productId, amount)
-                updateNutriments()
+            }.invokeOnCompletion {
+                onComplete()
             }
     }
     fun getProportions(): List<Float>{
-        recipe.let {
-            val carbCals = it.value.recipe.carbs.toFloat()*4
-            val fatCals = it.value.recipe.fat.toFloat()*9
-            val proteinCals = it.value.recipe.protein.toFloat()*4
+        nutrients.value.let {
+            val carbCals = it.carbs.toFloat()*4
+            val fatCals = it.fat.toFloat()*9
+            val proteinCals = it.protein.toFloat()*4
             val cals = carbCals + fatCals + proteinCals
             return listOf(carbCals/cals, fatCals/cals, proteinCals/cals)
-        }?: return emptyList()
+        }
 
     }
 
     fun removeIngredient(productId: Long) {
         viewModelScope.launch {
             recipeRepository.removeIngredient(recipeId, productId)
-            updateNutriments()
         }
     }
-
-    private fun updateNutriments(){
-        viewModelScope.launch {
-            var calories = 0.0
-            var carbs = 0.0
-            var fat = 0.0
-            var protein = 0.0
-            recipeRepository.getRecipeWithProducts(recipeId).collect{res ->
-                val ingredients = res.productList
-                for(ing in ingredients) {
-                    calories += ing.product.energyKcal100g*ing.amount/100
-                    carbs += ing.product.carbohydrates100g*ing.amount/100
-                    fat += ing.product.fat100g*ing.amount/100
-                    protein += ing.product.proteins100g*ing.amount/100
-                }
-                /*
-                rec = res.recipe.copy(
-                    calories = calories,
-                    carbs = carbs,
-                    fat = fat,
-                    protein = protein)
-
-                 */
-                }
-            //recipeRepository.update(rec)
-            }
-        }
 
 }
