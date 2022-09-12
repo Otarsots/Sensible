@@ -4,19 +4,16 @@ import androidx.room.Room
 import com.example.sensible.data.AppDatabase
 import com.example.sensible.data.datastore
 import com.example.sensible.data.repository.*
-import com.example.sensible.ui.diary.list.DiaryEditorViewModel
+import com.example.sensible.ui.diary.editor.DiaryEditorViewModel
 import com.example.sensible.ui.diary.search.RecipeSearchViewModel
 import com.example.sensible.ui.home.HomeViewModel
 import com.example.sensible.ui.product.editor.ProductEditorViewModel
 import com.example.sensible.ui.recipe.editor.RecipeEditorViewModel
 import com.example.sensible.ui.recipe.list.RecipeListViewModel
 import com.example.sensible.ui.recipe.search.ProductSearchViewModel
-import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
     single {
@@ -58,8 +55,8 @@ val dataModule = module {
     }
 
 
-    viewModel {
-        DiaryEditorViewModel(get())
+    viewModel {params ->
+        DiaryEditorViewModel(repository = get(), date = params.get())
     }
 
     viewModel {

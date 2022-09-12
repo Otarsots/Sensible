@@ -1,13 +1,15 @@
-package com.example.sensible.ui.diary.list
+package com.example.sensible.ui.diary.editor
 
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,18 +21,20 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 
 
 @Composable
 fun DiaryEditor(
     entries: List<DiaryEntry>,
-    diaryId: Long,
+    date: Long,
     navToRecipeEditor: (Long) -> Unit = {},
     onAddClick: () -> Unit = {},
     onMenuClick: (String) -> Unit = {},
     navToDate: (Long) -> Unit,
-    viewModel: DiaryEditorViewModel = getViewModel(),
+    viewModel: DiaryEditorViewModel = getViewModel{parametersOf(date)},
 ){
+    val dateName by viewModel.dateString.collectAsState()
     val dialogState = rememberMaterialDialogState()
     MaterialDialog(
         dialogState = dialogState,
@@ -39,8 +43,8 @@ fun DiaryEditor(
             negativeButton("Cancel")
         }
     ) {
-        datepicker { date ->
-            navToDate(date.toEpochDay())
+        datepicker { newDate ->
+            navToDate(newDate.toEpochDay())
         }
     }
 
@@ -62,8 +66,34 @@ fun DiaryEditor(
                 onClick = onAddClick
             )
         }
-    ){ paddingValues ->
-        Box(Modifier.padding(paddingValues))
+    ){ padding ->
+        
+        Surface(
+            modifier = Modifier
+                .padding(padding)
+                .padding(4.dp)
+                .fillMaxSize(),
+            color = MaterialTheme.colors.primary,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Text(
+                        text = dateName,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                    )
+                }
+                Surface(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                }
+            }
+        }
     }
 }
 

@@ -41,12 +41,14 @@ fun RecipeEditor(
     val scanLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
         onResult = { result ->
-            val id = result.contents.toLong()
-            viewModel.getProduct(id)
-            viewModel.addProduct(id, 100) {
-                navToProduct(id)
+            if (result.contents != null) {
+                val id = result.contents.toLong()
+                viewModel.getProduct(id)
+                viewModel.addProduct(id, 100) {
+                    navToProduct(id)
+                }
             }
-            }
+        }
     )
     Scaffold(
         topBar = {
@@ -66,8 +68,8 @@ fun RecipeEditor(
                     .setBeepEnabled(false)
                     .setDesiredBarcodeFormats(ScanOptions.PRODUCT_CODE_TYPES)
                     .setPrompt("Scan your product")
-                    )}finally {
-                        popBackStack()
+                    )}catch (e:Exception){
+
                     }}
             )
         }

@@ -15,6 +15,7 @@ import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 @Composable
 fun DefaultPreview() {
     SensibleTheme() {
+        val navToDate: (Long) -> Unit = {}
         val dialogState = rememberMaterialDialogState()
         MaterialDialog(
             dialogState = dialogState,
@@ -24,6 +25,7 @@ fun DefaultPreview() {
             }
         ) {
             datepicker { date ->
+                navToDate(date.toEpochDay())
                 // Do stuff with java.time.LocalDate object which is passed in
             }
         }

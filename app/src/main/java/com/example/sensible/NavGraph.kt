@@ -7,13 +7,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.sensible.ui.diary.list.DiaryEditor
+import com.example.sensible.ui.diary.editor.DiaryEditor
 import com.example.sensible.ui.diary.search.RecipeSearch
 import com.example.sensible.ui.home.HomeBody
-import com.example.sensible.ui.components.BarcodeScreen
 import com.example.sensible.ui.product.editor.ProductEditor
 import com.example.sensible.ui.recipe.editor.RecipeEditor
 import com.example.sensible.ui.recipe.list.RecipeList
+import java.time.LocalDate
 
 @Suppress("EnumEntryName")
 enum class Screen {
@@ -41,18 +41,18 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
             HomeBody()
         }
         composable(
-            route = "${Screen.diaryEditor.name}?diaryId={diaryId}",
+            route = "${Screen.diaryEditor.name}?date={date}",
             arguments = listOf(
-                navArgument("diaryId"){
-                    defaultValue = -1
+                navArgument("date"){
+                    defaultValue = LocalDate.now().toEpochDay()
                     type = NavType.LongType
                 })){ backStackEntry ->
             DiaryEditor(
-                diaryId = backStackEntry.arguments!!.getLong("diaryId"),
+                date = backStackEntry.arguments!!.getLong("date"),
                 entries = emptyList(),
                 navToRecipeEditor = {recipeId -> navController.navigate("${Screen.recipeEditor.name}?recipeId=$recipeId")},
                 onAddClick = {navController.navigate(Screen.recipeSearch.name)},
-                navToDate = {diaryId -> navController.navigate("${Screen.diaryEditor.name}?diaryId=$diaryId")}
+                navToDate = {date -> navController.navigate("${Screen.diaryEditor.name}?date=$date")}
             )
         }
         composable(Screen.recipeSearch.name){
@@ -97,15 +97,5 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
                 popBackStack = {navController.popBackStack()}
             )
         }
-        /*
-        composable(Screen.barcodeScanner.name){
-            BarcodeScreen(
-                onCodeScanned = {productId ->
-                    navController.navigate("${Screen.productEditor.name}?productId=$productId")
-                }
-            )
-        }
-
-         */
     }
 }

@@ -32,8 +32,13 @@ private val LightColorPalette = lightColors(
     onSurface = Color.Black,
 )
 
-private val ExtLightColorPalette = ExtendedColors(LightColorPalette,Color.White,Color.LightGray,Color.Gray)
-private val ExtDarkColorPalette = ExtendedColors(DarkColorPalette,Color.White,Color.LightGray,Color.Gray)
+//private val ExtLightColorPalette = ExtendedColors(LightColorPalette,Color.White,Color.LightGray,Color.Gray)
+private val ExtDarkColorPalette = ExtendedColors(
+    material = DarkColorPalette,
+    carbs = OrangeA100,
+    fat = OrangeA200,
+    protein = OrangeA400
+    )
 
 private val LocalColors = staticCompositionLocalOf { ExtDarkColorPalette }
 
@@ -58,7 +63,8 @@ fun SensibleTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
     val colors = if (darkTheme) {
         ExtDarkColorPalette
     } else {
-        ExtLightColorPalette
+        //ExtLightColorPalette
+        ExtDarkColorPalette
     }
 
     CompositionLocalProvider(LocalColors provides colors) {
