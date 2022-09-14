@@ -1,6 +1,6 @@
 # Sensible
 
-An Open-Source Android app for creating food tracking in material style. 
+An Open-Source Android app for tracking food in material style. 
 Created with usability and minimalism in mind.
 
 Inspired by https://codeberg.org/noahjutz/GymRoutines/
