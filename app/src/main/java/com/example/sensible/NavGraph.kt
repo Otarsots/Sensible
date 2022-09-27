@@ -7,58 +7,67 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.sensible.ui.diary.editor.DiaryEditor
+import com.example.sensible.ui.diary.day.DiaryDay
 import com.example.sensible.ui.diary.search.RecipeSearch
-import com.example.sensible.ui.home.HomeBody
 import com.example.sensible.ui.product.editor.ProductEditor
 import com.example.sensible.ui.recipe.editor.RecipeEditor
 import com.example.sensible.ui.recipe.list.RecipeList
+import com.example.sensible.ui.settings.SettingsMenu
+import com.example.sensible.ui.settings.goal.GoalSettings
+import com.example.sensible.ui.statistics.StatisticsScreen
 import java.time.LocalDate
 
 @Suppress("EnumEntryName")
 enum class Screen {
-    home,
-    diaryEditor,
+    statistics,
+    diaryDay,
     diarySearch,
     recipeList,
     recipeEditor,
     recipeSearch,
     productEditor,
     barcodeScanner,
-    settings,
-    goals
+    settingsMenu,
+    settingsGoals,
 }
 
 @Composable
 fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
-        startDestination = Screen.home.name,
+        startDestination = Screen.recipeList.name,
         modifier = modifier
     ) {
 
-        composable(Screen.home.name) {
-            HomeBody()
+        composable(Screen.statistics.name) {
+            StatisticsScreen()
         }
         composable(
-            route = "${Screen.diaryEditor.name}?date={date}",
+            route = "${Screen.diaryDay.name}?date={date}",
             arguments = listOf(
                 navArgument("date"){
                     defaultValue = LocalDate.now().toEpochDay()
                     type = NavType.LongType
                 })){ backStackEntry ->
-            DiaryEditor(
+            DiaryDay(
                 date = backStackEntry.arguments!!.getLong("date"),
-                entries = emptyList(),
+                //entries = emptyList(),
                 navToRecipeEditor = {recipeId -> navController.navigate("${Screen.recipeEditor.name}?recipeId=$recipeId")},
-                onAddClick = {navController.navigate(Screen.recipeSearch.name)},
-                navToDate = {date -> navController.navigate("${Screen.diaryEditor.name}?date=$date")}
+                onAddClick = {date -> navController.navigate("${Screen.recipeSearch.name}?date=$date")},
+                navToDate = {date -> navController.navigate("${Screen.diaryDay.name}?date=$date")},
+                navToSettings = {navController.navigate(Screen.settingsMenu.name)}
             )
         }
-        composable(Screen.recipeSearch.name){
+        composable(
+            route = "${Screen.recipeSearch.name}?date={date}",
+            arguments = listOf(
+                navArgument("date"){
+                    defaultValue = LocalDate.now().toEpochDay()
+                    type = NavType.LongType
+                })){ backStackEntry ->
             RecipeSearch(
+                date = backStackEntry.arguments!!.getLong("date"),
                 popBackStack = {navController.popBackStack()},
-                onScanClick = {navController.navigate(Screen.barcodeScanner.name)}
             )
         }
         composable(Screen.recipeList.name){
@@ -94,6 +103,17 @@ fun SensibleNavHost(navController: NavHostController, modifier: Modifier = Modif
             ProductEditor(
                 productId = backStackEntry.arguments!!.getLong("productId"),
                 recipeId = backStackEntry.arguments!!.getLong("recipeId"),
+                popBackStack = {navController.popBackStack()}
+            )
+        }
+        composable(Screen.settingsMenu.name){
+            SettingsMenu(
+                popBackStack = {navController.popBackStack()},
+                navToGoalSettings = {navController.navigate(Screen.settingsGoals.name)}
+            )
+        }
+        composable(Screen.settingsGoals.name){
+            GoalSettings(
                 popBackStack = {navController.popBackStack()}
             )
         }

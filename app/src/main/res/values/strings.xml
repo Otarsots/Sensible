@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Sensible</string>
-    <string name="home_name">Home</string>
+    <string name="settings_name">Settings</string>
+    <string name="settings_goal_name">Goals</string>
+    <string name="statistics_name">Statistics</string>
     <string name="diary_name">Diary</string>
     <string name="diary_editor_name">Edit entry</string>
     <string name="diary_search_name">Search food</string>

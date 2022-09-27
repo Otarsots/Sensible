@@ -3,37 +3,30 @@ package com.example.sensible
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.ui.res.painterResource
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.sensible.data.AppDatabase
 import com.example.sensible.di.dataModule
 import com.example.sensible.di.networkModule
 import com.example.sensible.ui.components.BottomBar
-import com.example.sensible.ui.theme.SensibleTheme
 import com.example.sensible.ui.components.allScreens
+import com.example.sensible.ui.theme.SensibleTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 
 class MainActivity : ComponentActivity() {
-    private val preferences: DataStore<Preferences> by inject()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startKoin {

@@ -1,17 +1,24 @@
 package com.example.sensible.models
 
-import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.Junction
-import androidx.room.Relation
+import androidx.room.PrimaryKey
 
-@Entity(primaryKeys = ["date", "recipeId"])
-data class DiaryEntryRecipeCrossRef (
+@Entity
+data class DiaryEntry (
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val date: Long,
     val recipeId: Long,
-    val amount: Long,
+    val amount: Long = 100,
         )
 
+data class ListItem(
+    val id: Long,
+    val name: String,
+    val amount: Long,
+    val calories: Double
+)
+/*
 data class DiaryEntry (
     val recipe: Recipe,
     val amount: Long,
@@ -26,4 +33,5 @@ data class  DayWithDiaryEntries (
     )
     val entries: List<DiaryEntry>
         )
+ */
 

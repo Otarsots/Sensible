@@ -33,5 +33,4 @@ interface OpenFoodFactsApi {
             emit(getRequestResult(barcode).body()?.product)
         }
     }
-
 }

@@ -12,8 +12,8 @@ import com.google.gson.reflect.TypeToken
 
 
 
-@Database(entities = [Product::class, Day::class, Recipe::class, RecipeProductCrossRef::class, DiaryEntryRecipeCrossRef::class],
-    views = [Ingredient::class]
+@Database(entities = [Product::class, Goal::class, Recipe::class, RecipeProductCrossRef::class, DiaryEntry::class],
+    views = [Ingredient::class, RecipeNutrients::class, DateNutrients::class]
     , version = 1)
 abstract class AppDatabase: RoomDatabase() {
 

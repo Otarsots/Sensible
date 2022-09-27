@@ -145,21 +145,21 @@ fun ProductEditor(
                             ) {
 
                                 Text(
-                                    text = "Calories: ${calories}kcal",
+                                    text = String.format("Calories: %.1fkcal",calories),
                                     style = MaterialTheme.typography.body2,
                                 )
                                 Text(
-                                    text = "Carbohydrates: ${carbs}g",
+                                    text = String.format("Carbs: %.1fg",carbs),
                                     style = MaterialTheme.typography.body2,
                                     color = MaterialTheme.extendedColors.carbs
                                 )
                                 Text(
-                                    text = "Fat: ${fat}g",
+                                    text = String.format("Fat: %.1fg",fat),
                                     style = MaterialTheme.typography.body2,
                                     color = MaterialTheme.extendedColors.fat
                                 )
                                 Text(
-                                    text = "Protein: ${protein}g",
+                                    text = String.format("Protein: %.1fg",protein),
                                     style = MaterialTheme.typography.body2,
                                     color = MaterialTheme.extendedColors.protein
                                 )

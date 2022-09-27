@@ -16,12 +16,7 @@
 
 package com.example.sensible.ui.components
 
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,25 +30,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.sensible.ui.theme.SensibleTheme
 
-private const val DividerLengthInDegrees = 2.8f
+private var DividerLengthInDegrees = 2.8f
 
 /**
  * A donut chart that animates when loaded.
  */
 @Composable
 fun AnimatedCircle(
+    modifier: Modifier = Modifier,
     proportions: List<Float>,
     colors: List<Color>,
-    modifier: Modifier = Modifier
+    strokeSize: Dp = 32.dp,
+    useDivider: Boolean = true,
 ) {
     val currentState = remember {
         MutableTransitionState(AnimatedCircleProgress.START)
             .apply { targetState = AnimatedCircleProgress.END }
     }
-    val stroke = with(LocalDensity.current) { Stroke(32.dp.toPx()) }
+    val dividerLengthInDegrees = if (!useDivider) 0f else 2.8f
+    val stroke = with(LocalDensity.current) { Stroke(strokeSize.toPx()) }
     val transition = updateTransition(currentState, label = "")
     val angleOffset by transition.animateFloat(
         transitionSpec = {
@@ -99,8 +98,8 @@ fun AnimatedCircle(
             val sweep = proportion * angleOffset
             drawArc(
                 color = colors[index],
-                startAngle = startAngle + DividerLengthInDegrees / 2,
-                sweepAngle = sweep - DividerLengthInDegrees,
+                startAngle = startAngle + dividerLengthInDegrees / 2,
+                sweepAngle = sweep - dividerLengthInDegrees,
                 topLeft = topLeft,
                 size = size,
                 useCenter = false,

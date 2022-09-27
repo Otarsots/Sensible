@@ -1,5 +1,6 @@
-package com.example.sensible.data
 
+package com.example.sensible.data
+/*
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.datastore.core.DataStore
@@ -24,14 +25,18 @@ sealed class AppPrefs<T>(val key: Preferences.Key<T>, val defaultValue: T) {
         defaultValue = false
     )
 
-    object CalorieGoal : AppPrefs<Int>(
-        key = intPreferencesKey("calorieGoal"),
-        defaultValue = -1
+    object Goal: AppPrefs<Goal>(
+        key = 
     )
 
-    object ProteinGoal : AppPrefs<Int>(
-        key = intPreferencesKey("proteinGoal"),
-        defaultValue = -1
+    object CalorieGoal : AppPrefs<Double>(
+        key = doublePreferencesKey("calorieGoal"),
+        defaultValue = 0.0
+    )
+
+    object ProteinGoal : AppPrefs<Double>(
+        key = doublePreferencesKey("proteinGoal"),
+        defaultValue = 0.0
     )
 
     object CarbGoal : AppPrefs<Double>(
@@ -49,10 +54,6 @@ sealed class AppPrefs<T>(val key: Preferences.Key<T>, val defaultValue: T) {
         defaultValue = ColorTheme.FollowSystem.name
     )
 
-    object UpdateRoutineAfterWorkout : AppPrefs<Boolean>(
-        key = booleanPreferencesKey("updateRoutineAfterWorkout"),
-        defaultValue = false
-    )
 }
 
 suspend fun DataStore<Preferences>.resetAppSettings() {
@@ -60,6 +61,8 @@ suspend fun DataStore<Preferences>.resetAppSettings() {
         //it[AppPrefs.ShowBottomNavLabels.key] = AppPrefs.ShowBottomNavLabels.defaultValue
         it[AppPrefs.IsFirstRun.key] = AppPrefs.IsFirstRun.defaultValue
         it[AppPrefs.AppTheme.key] = AppPrefs.AppTheme.defaultValue
-        it[AppPrefs.UpdateRoutineAfterWorkout.key] = AppPrefs.UpdateRoutineAfterWorkout.defaultValue
     }
 }
+
+
+ */

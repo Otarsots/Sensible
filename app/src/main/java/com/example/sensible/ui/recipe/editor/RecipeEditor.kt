@@ -2,32 +2,27 @@ package com.example.sensible.ui.recipe.editor
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.sensible.R
-import com.example.sensible.models.Ingredient
-import com.example.sensible.models.Recipe
 import com.example.sensible.ui.components.*
 import com.example.sensible.ui.theme.extendedColors
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -139,21 +134,21 @@ fun RecipeEditorContent(
                     ) {
 
                         Text(
-                            text = "Calories: ${nutrients.calories}kcal",
+                            text = String.format("Calories: %.1fkcal",nutrients.calories),
                             style = MaterialTheme.typography.body2,
                         )
                         Text(
-                            text = "Carbohydrates: ${nutrients.carbs}g",
+                            text = String.format("Carbs: %.1fg",nutrients.carbs),
                             style = MaterialTheme.typography.body2,
                             color = MaterialTheme.extendedColors.carbs
                         )
                         Text(
-                            text = "Fat: ${nutrients.fat}g",
+                            text = String.format("Fat: %.1fg",nutrients.fat),
                             style = MaterialTheme.typography.body2,
                             color = MaterialTheme.extendedColors.fat
                         )
                         Text(
-                            text = "Protein: ${nutrients.protein}g",
+                            text = String.format("Protein: %.1fg",nutrients.protein),
                             style = MaterialTheme.typography.body2,
                             color = MaterialTheme.extendedColors.protein
                         )

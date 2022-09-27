@@ -1,31 +1,25 @@
 package com.example.sensible.ui.components
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.runtime.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.sensible.R
-import com.example.sensible.Screen
 import com.example.sensible.SensibleScreen
-import com.example.sensible.ui.theme.SensibleTheme
 
 
 val allScreens = listOf(
-    SensibleScreen.Home,
-    SensibleScreen.DiaryEditor,
-    SensibleScreen.RecipeList
+    SensibleScreen.DiaryDay,
+    SensibleScreen.RecipeList,
+    SensibleScreen.Statistics
 )
 
 @Composable

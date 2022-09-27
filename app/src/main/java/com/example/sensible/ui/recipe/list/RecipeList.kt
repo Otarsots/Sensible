@@ -1,26 +1,19 @@
 package com.example.sensible.ui.recipe.list
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.sensible.R
 import com.example.sensible.models.Recipe
 import com.example.sensible.ui.components.*
-import com.example.sensible.ui.recipe.list.RecipeListViewModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 
@@ -54,7 +47,8 @@ fun RecipeList(
             recipes = recipes ?: emptyList(),
             viewModel = viewModel,
             navToRecipeEditor = navToRecipeEditor,
-            modifier = Modifier.padding(paddingValues))
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 }
 
